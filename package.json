@@ -10,14 +10,15 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:vsgencomments.helloWorld"
+		"onCommand:vsgencomments.insertComment"
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "vsgencomments.helloWorld",
-				"title": "Hello World"
+				"command": "vsgencomments.insertComment",
+				"title": "Generate Comment",
+				"category": "Lamner"
 			}
 		]
 	},
