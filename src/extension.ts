@@ -1,27 +1,59 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+  console.log('Congratulations, your extension "vsgencomments" is now active!');
+  
+  let disposable = vscode.commands.registerCommand("vsgencomments.insertComment", () => {
+    // let content: string = "// This is a comment\n// that is 'generated' and\n// pulled from the server\n// ^_^\n\nGENIOUS";
 
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
-	console.log('Congratulations, your extension "vsgencomments" is now active!');
+    // Get instance of edtior
+    const edtior  = vscode.window.activeTextEditor;
+    if (!edtior) {return;}
+    
+    let content: string = "// Guy and Rocco Make and amazing team!!!";
+    // Get language
+    let lang: string = edtior.document.languageId;
+    
+    // debug message - to remove
+    console.log(lang);
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('vsgencomments.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
+    // perform async operation to utilize textDocument 'thenable' promise
+    (async () => {
+      
+      // debug message - to remove
+      console.log("Trying to show the window");
+      
+      // Open document with the function with comment and language of the editor
+      const previewDoc = await vscode.workspace.openTextDocument(
+        {language: lang, content: content}
+      );
+      // Put the editor side by side 
+      vscode.window.showTextDocument(previewDoc, vscode.ViewColumn.Beside, true);
+  
+      //  debug message to remove
+      console.log("guess we already did that");
 
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from VSgencomments!');
-	});
+      let userOptions: string[] = ["Yes: Close editor", "No: Leave open", "No: Close editor"];
+      const selection = await vscode.window.showInformationMessage("Here is your code with a comment!", ...userOptions).then(selection => {
+        if (selection === userOptions[0]) {
+        // Insert comment 
+        vscode.window.showInformationMessage("Cool");
+      } else if (selection === userOptions[1]) {
+        vscode.window.showInformationMessage("Alright, we await your commands");
+      } else {
+        // Close window?
+        vscode.window.showInformationMessage("Our apologies, sorry to bother you");
+      }
+      });
 
-	context.subscriptions.push(disposable);
+
+      
+    })();
+    
+      vscode.window.showInformationMessage("Extension is running");
+    }
+  );
+  
+  context.subscriptions.push(disposable);
 }
-
-// this method is called when your extension is deactivated
 export function deactivate() {}
