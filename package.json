@@ -20,8 +20,17 @@
 				"title": "Generate Comment",
 				"category": "Lamner"
 			}
+		],
+		"keybindings": [
+			{
+				"key": "ctrl+alt+r",
+				"command": "vsgencomments.insertComment",
+				"when": "textInputFocus"
+			}
 		]
 	},
+
+
 	"scripts": {
 		"vscode:prepublish": "npm run package",
 		"compile": "webpack",
