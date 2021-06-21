@@ -1,22 +1,31 @@
-import {ICodeLanguage} from "./language-interface-registry";
+// import {ICodeLanguage, ICodeLanguageNS.register} from "./language-interface-registry";
+// import {  } from "./language-interface-registry";
 
-@ICodeLanguage.register
-export class Cpp {
-    _singleLineComment: string = "//";
-    _multiLineComment: string = "/* . */";
-    _languageID: string = "cpp";
-    
-    getName(): string { return this._languageID; }
-    
-    getCommentStyle (commentLength: number): string[] {
-        let temp: string[] = ["", ""];
-        if (commentLength > 80) {
-            temp = this._multiLineComment.split(".");    
-        } else {
-            temp[0] = this._singleLineComment;
-        }
-        
-        return temp;
-    }
+// @register
+// export default class Cpp implements ICodeLanguage {
 
-}
+//     _languageID: string = "cpp";
+    
+//     getName(): string { return this._languageID; }
+    
+//     getCommentStyle (comment: string): string {
+//         if (comment.length > 80) {
+//             let temp: string[] = comment.split(" ");
+//             let retComment: string = "/*\n *";
+//             let lineLength: number = 0;
+//             temp.forEach(word => {
+//                 if ( (lineLength < 80) && (lineLength + word.length <= 80) ) {
+//                     retComment += " " + word;
+//                     lineLength += word.length + 1;
+//                 } else {
+//                     retComment += "\n *";
+//                     lineLength = 0;
+//                 }
+//             });
+//             return retComment + "\n */";
+
+//         } else {
+//             return "// " + comment;
+//         }  
+//     }
+// }

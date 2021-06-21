@@ -1,15 +1,14 @@
 import * as vscode from "vscode";
 import {ICodeLanguage} from "./language-interface-registry";
+import {ICodeLanguageNS} from "./language-interface-registry";
+// import * as cpp from "./codeLangauge_cpp";
 
 export function activate(context: vscode.ExtensionContext) {
     console.log('Congratulations, your extension "vsgencomments" is now active!');
     vscode.window.showInformationMessage("Extension is running");
 
-
-//- --- --- --- --- ,,, --- ''' pXq ''' --- ,,, --- --- --- --- -//
-
     //  generate the registry of all supported languages
-    var languageRegistry = ICodeLanguage.getImplementations();
+    let languageRegistry = ICodeLanguageNS.getImplementations();
     
     let languageFactory = new Map();
 
@@ -19,41 +18,27 @@ export function activate(context: vscode.ExtensionContext) {
         console.log(temp.getName());
     });
 
-    
-//- --- --- --- --- ,,, --- ''' pXq ''' --- ,,, --- --- --- --- -//
 
     let disposable = vscode.commands.registerCommand(
             "vsgencomments.insertComment", 
             () => {
-
+        
         // Get instance of edtior
         const editor  = vscode.window.activeTextEditor;
         if (!editor) { return; }
-
         // Select the text in the active editor and get the first line number
         let selection = editor.selection;
         let startLine = selection.start.line;
-        
         // Select the text
         // TODO: Use a POST request, to send the code to receive the comment
         let selectedText = editor.document.getText(selection);
-        
-        // TODO: Use a GET request to receive this comment
-        // let commentToInsert: string = "Guy and Rocco Make and amazing team!!!";
         let commentToInsert: string = 
-            "Guy and Rocco make an amazing team this is also more words for me to say can't believe this might work last thing is backslash n this is even more words because we areally wanna test out what our function is really going to really do!!!!"
+            "Guy and Rocco make an amazing team this is also more words for me to say can't believe this might work last thing is backslash n this is even more words because we areally wanna test out what our function is really going to really do!!!!";
         // Get language the user is using
         let documentLanguage: string = editor.document.languageId;
-
-//- --- --- --- --- ,,, --- ''' pXq ''' --- ,,, --- --- --- --- -//
-
+        console.log(commentToInsert);
         let languageObject = languageFactory.get(documentLanguage);
         let formattedComment: string = languageObject.getCommentStyle(commentToInsert);
-
-
-//- --- --- --- --- ,,, --- ''' pXq ''' --- ,,, --- --- --- --- -//
-
-
         // perform async operation to utilize textDocument 'thenable' promise
         (async () => {
             // Open document with the function with comment and language of the editor
@@ -78,7 +63,6 @@ export function activate(context: vscode.ExtensionContext) {
                     "Here is your code with a comment!", 
                     ...userOptions
             ).then(selection => {
-
                 // if user picks this option, a comment will be inserted
                 if (selection === userOptions[0]) {
                     formattedComment += "\n";                                            

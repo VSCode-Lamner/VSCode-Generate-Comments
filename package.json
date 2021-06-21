@@ -23,7 +23,7 @@
 		],
 		"keybindings": [
 			{
-				"key": "ctrl+alt+r",
+				"key": "ctrl+alt+;",
 				"command": "vsgencomments.insertComment",
 				"when": "textInputFocus"
 			}
