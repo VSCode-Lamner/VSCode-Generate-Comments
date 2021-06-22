@@ -2,45 +2,84 @@ import * as vscode from "vscode";
 import {ICodeLanguage} from "./language-interface-registry";
 import {ICodeLanguageNS} from "./language-interface-registry";
 // import * as cpp from "./codeLangauge_cpp";
+import { getComments } from "./test/ajax";
+
 
 export function activate(context: vscode.ExtensionContext) {
     console.log('Congratulations, your extension "vsgencomments" is now active!');
     vscode.window.showInformationMessage("Extension is running");
-
+    
     //  generate the registry of all supported languages
     let languageRegistry = ICodeLanguageNS.getImplementations();
     
     let languageFactory = new Map();
-
+    
     languageRegistry.forEach(language => {
         let temp = new language;
         languageFactory.set(temp.getName(), temp);
         console.log(temp.getName());
     });
-
-
+    
+    
     let disposable = vscode.commands.registerCommand(
-            "vsgencomments.insertComment", 
-            () => {
+        "vsgencomments.insertComment", 
+        () => {
+            
+            // Get instance of edtior
+            const editor  = vscode.window.activeTextEditor;
+            if (!editor) { return; }
+            // Select the text in the active editor and get the first line number
+            let selection = editor.selection;
+            let startLine = selection.start.line;
+            // Select the text
+            // TODO: Use a POST request, to send the code to receive the comment
+            let selectedText = editor.document.getText(selection);
+            
+            
+            
+            //- --- --- --- --- ,,, --- ''' pXq ''' --- ,,, --- --- --- --- -//
+
+            // global.fetch = require('node-fetch');
+            
+            (async () => {
+                console.log("Did I make it here?");
+                
+                getComments(selectedText);
+                // await fetch("http://localhost:3000", {
+                //     method: "POST",
+                //     headers: {
+                //         "Content-Type": "application/x-www-form-urlencoded"
+                //     },
+                //     body: "input=" + selectedText
+                // }).then( (response) => {
+                //     console.log(response);
+                //     return response.text();
+                // }).then( (data) => {
+                //     console.log(data);
+                // })
+                // // .then(undefined, err => console.error("IM IN ERROR"));
+                // .catch(error => console.log(error))
+           
+
+                console.log("waiting");
+        // });
         
-        // Get instance of edtior
-        const editor  = vscode.window.activeTextEditor;
-        if (!editor) { return; }
-        // Select the text in the active editor and get the first line number
-        let selection = editor.selection;
-        let startLine = selection.start.line;
-        // Select the text
-        // TODO: Use a POST request, to send the code to receive the comment
-        let selectedText = editor.document.getText(selection);
-        let commentToInsert: string = 
-            "Guy and Rocco make an amazing team this is also more words for me to say can't believe this might work last thing is backslash n this is even more words because we areally wanna test out what our function is really going to really do!!!!";
-        // Get language the user is using
-        let documentLanguage: string = editor.document.languageId;
-        console.log(commentToInsert);
-        let languageObject = languageFactory.get(documentLanguage);
-        let formattedComment: string = languageObject.getCommentStyle(commentToInsert);
+
+                console.log("done waiting");
+
+        //- --- --- --- --- ,,, --- ''' pXq ''' --- ,,, --- --- --- --- -//
+
+
+            let commentToInsert: string = 
+                "Guy and Rocco make an amazing team this is also more words for me to say can't believe this might work last thing is backslash n this is even more words because we areally wanna test out what our function is really going to really do!!!!";
+            // Get language the user is using
+            let documentLanguage: string = editor.document.languageId;
+            let languageObject = languageFactory.get(documentLanguage);
+            let formattedComment: string = languageObject.getCommentStyle(commentToInsert);
         // perform async operation to utilize textDocument 'thenable' promise
-        (async () => {
+
+        // (async () => {
+        
             // Open document with the function with comment and language of the editor
             const previewDoc = await vscode.workspace.openTextDocument(
                 {language: documentLanguage, content: (formattedComment + "\n" + selectedText)}
