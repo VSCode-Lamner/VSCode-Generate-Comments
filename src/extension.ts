@@ -1,6 +1,5 @@
 import * as vscode from "vscode";
 import {ICodeLanguageNS} from "./language-interface-registry";
-import {ICodeLanguage} from "./language-interface-registry";
 import fetch from 'cross-fetch';
 
 export function activate(context: vscode.ExtensionContext) {
@@ -33,38 +32,35 @@ export function activate(context: vscode.ExtensionContext) {
         let commentToInsert: string = "";
         let data: any = {};
 
-
         (async () => {
             try {
-              const response = await fetch('http://localhost:3000/models/lamner', {
-                  method: 'post',
-                  headers: {
-                      'Content-Type': 'application/x-www-form-urlencoded'
-                  },
-                  body: "input=" + selectedText
-                  
-              });
-              
-              if (response.status >= 400) {
+                const response = await fetch('http://localhost:3000/models/lamner', {
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: "input=" + selectedText
+                    
+                });
+                
+                if (response.status >= 400) {
                 throw new Error("Bad response from server");
-              }
-              
-              data = await response.json();
-              commentToInsert = data["response"];
+                }
+                
+                data = await response.json();
+                commentToInsert = data["response"];
             
-              console.log(commentToInsert);
+                console.log(commentToInsert);
 
-            } catch (err) {
-              console.error(err);
+            } catch (err) { 
+                console.error(err);
             }
-        // })();
-
-        let documentLanguage: string = editor.document.languageId;
-        console.log(commentToInsert);
-        let languageObject = languageFactory.get(documentLanguage);
-        let formattedComment: string = languageObject.getCommentStyle(commentToInsert);
-        // perform async operation to utilize textDocument 'thenable' promise
-        // (async () => {
+            
+            let documentLanguage: string = editor.document.languageId;
+            console.log(commentToInsert);
+            let languageObject = languageFactory.get(documentLanguage);
+            let formattedComment: string = languageObject.getCommentStyle(commentToInsert);
+            // perform async operation to utilize textDocument 'thenable' promise
             // Open document with the function with comment and language of the editor
             const previewDoc = await vscode.workspace.openTextDocument(
                 {language: documentLanguage, content: (formattedComment + "\n" + selectedText)}
@@ -107,7 +103,7 @@ export function activate(context: vscode.ExtensionContext) {
                         );
                     })();
                     
-            //  todo: Decide if user deserves response
+            // todo: Decide if user deserves response
                     vscode.window.showInformationMessage("Cool");
 
                 // leave editor open for the user
@@ -127,12 +123,6 @@ export function activate(context: vscode.ExtensionContext) {
                     );
                 }
             });
-        
-
-
-
-
-            
         })();
     });
     context.subscriptions.push(disposable);
