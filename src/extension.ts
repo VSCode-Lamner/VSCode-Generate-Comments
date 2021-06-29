@@ -1,7 +1,6 @@
 import * as vscode from "vscode";
-import {ICodeLanguage} from "./language-interface-registry";
 import {ICodeLanguageNS} from "./language-interface-registry";
-// import * as cpp from "./codeLangauge_cpp";
+import fetch from 'cross-fetch';
 
 export function activate(context: vscode.ExtensionContext) {
     console.log('Congratulations, your extension "vsgencomments" is now active!');
@@ -18,7 +17,6 @@ export function activate(context: vscode.ExtensionContext) {
         console.log(temp.getName());
     });
 
-
     let disposable = vscode.commands.registerCommand(
             "vsgencomments.insertComment", 
             () => {
@@ -30,17 +28,39 @@ export function activate(context: vscode.ExtensionContext) {
         let selection = editor.selection;
         let startLine = selection.start.line;
         // Select the text
-        // TODO: Use a POST request, to send the code to receive the comment
         let selectedText = editor.document.getText(selection);
-        let commentToInsert: string = 
-            "Guy and Rocco make an amazing team this is also more words for me to say can't believe this might work last thing is backslash n this is even more words because we areally wanna test out what our function is really going to really do!!!!";
-        // Get language the user is using
-        let documentLanguage: string = editor.document.languageId;
-        console.log(commentToInsert);
-        let languageObject = languageFactory.get(documentLanguage);
-        let formattedComment: string = languageObject.getCommentStyle(commentToInsert);
-        // perform async operation to utilize textDocument 'thenable' promise
+        let commentToInsert: string = "";
+        let data: any = {};
+
         (async () => {
+            try {
+                const response = await fetch('http://localhost:3000/models/lamner', {
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: "input=" + selectedText
+                    
+                });
+                
+                if (response.status >= 400) {
+                throw new Error("Bad response from server");
+                }
+                
+                data = await response.json();
+                commentToInsert = data["response"];
+            
+                console.log(commentToInsert);
+
+            } catch (err) { 
+                console.error(err);
+            }
+            
+            let documentLanguage: string = editor.document.languageId;
+            console.log(commentToInsert);
+            let languageObject = languageFactory.get(documentLanguage);
+            let formattedComment: string = languageObject.getCommentStyle(commentToInsert);
+            // perform async operation to utilize textDocument 'thenable' promise
             // Open document with the function with comment and language of the editor
             const previewDoc = await vscode.workspace.openTextDocument(
                 {language: documentLanguage, content: (formattedComment + "\n" + selectedText)}
@@ -83,7 +103,7 @@ export function activate(context: vscode.ExtensionContext) {
                         );
                     })();
                     
-            //  todo: Decide if user deserves response
+            // todo: Decide if user deserves response
                     vscode.window.showInformationMessage("Cool");
 
                 // leave editor open for the user
@@ -103,7 +123,6 @@ export function activate(context: vscode.ExtensionContext) {
                     );
                 }
             });
-        
         })();
     });
     context.subscriptions.push(disposable);
