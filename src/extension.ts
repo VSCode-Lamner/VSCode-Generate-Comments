@@ -3,75 +3,71 @@ import {ICodeLanguageNS} from "./language-interface-registry";
 import fetch from 'cross-fetch';
 
 export function activate(context: vscode.ExtensionContext) {
-    console.log('Congratulations, your extension "vsgencomments" is now active!');
-    vscode.window.showInformationMessage("Extension is running");
+    console.log('Congratulations, your extension "vsgencomments" is now active!'); // Todo: Remove in final product (prior to publishing)
+    vscode.window.showInformationMessage("Extension is running"); // Todo: Remove in final product (prior to publishing)
 
-    //  generate the registry of all supported languages
+    // Adding predefined languages to factory simplifies software extensibility
     let languageRegistry = ICodeLanguageNS.getImplementations();
-    
     let languageFactory = new Map();
 
     languageRegistry.forEach(language => {
         let temp = new language;
         languageFactory.set(temp.getName(), temp);
-        console.log(temp.getName());
+        console.log(temp.getName()); // Todo: Remove in final product (prior to publishing)
     });
 
     let disposable = vscode.commands.registerCommand(
             "vsgencomments.insertComment", 
             () => {
         
-        // Get instance of edtior
-        const editor  = vscode.window.activeTextEditor;
+        // Extenstion requries code to be passed to the model
+        const editor  = vscode.window.activeTextEditor; 
         if (!editor) { return; }
-        // Select the text in the active editor and get the first line number
+        
         let selection = editor.selection;
-        let startLine = selection.start.line;
-        // Select the text
         let selectedText = editor.document.getText(selection);
-        let commentToInsert: string = "";
-        let data: any = {};
+        let modelResponseComment: string = "";
+        let modelResponseJSON: any = {};
 
         (async () => {
             try {
-                const response = await fetch('http://localhost:3000/models/lamner', {
+                const modelResponse = await fetch('http://localhost:3000/models/lamner', {
                     method: 'post',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
                     body: "input=" + selectedText
-                    
                 });
                 
-                if (response.status >= 400) {
-                throw new Error("Bad response from server");
+                if (modelResponse.status >= 400) {
+                    throw new Error("Bad response from server");
                 }
                 
-                data = await response.json();
-                commentToInsert = data["response"];
+                modelResponseJSON = await modelResponse.json();
+                modelResponseComment = modelResponseJSON["response"];
             
-                console.log(commentToInsert);
+                console.log(modelResponseComment); // Todo: Remove in final product (prior to publishing) 
 
             } catch (err) { 
                 console.error(err);
             }
             
+            // Factory lets us define comment format per language
             let documentLanguage: string = editor.document.languageId;
-            console.log(commentToInsert);
             let languageObject = languageFactory.get(documentLanguage);
-            let formattedComment: string = languageObject.getCommentStyle(commentToInsert);
-            // perform async operation to utilize textDocument 'thenable' promise
-            // Open document with the function with comment and language of the editor
+            let formattedComment: string = languageObject.getCommentStyle(modelResponseComment);
+
             const previewDoc = await vscode.workspace.openTextDocument(
-                {language: documentLanguage, content: (formattedComment + "\n" + selectedText)}
+                {language: documentLanguage, content: (
+                    formattedComment + "\n" + selectedText
+                )}
             );
             
-            // Put the editor side by side 
+            // Visually indicates what document looks like with the comment applied
             vscode.window.showTextDocument(
                 previewDoc, vscode.ViewColumn.Beside, false
             );
             
-            //  provide the user with clear indications of choice
             let userOptions: string[] = [
                 "Yes: Close editor",
                 "No: Leave open",
@@ -79,36 +75,34 @@ export function activate(context: vscode.ExtensionContext) {
             ];
             
             // Give the user the options they have with the commented code preview
-            const selection = await vscode.window.showInformationMessage(
-                    "Here is your code with a comment!", 
+            const selectedOption = await vscode.window.showInformationMessage(
+                    "Would you like to apply these changes?", 
                     ...userOptions
-            ).then(selection => {
-                // if user picks this option, a comment will be inserted
-                if (selection === userOptions[0]) {
+            ).then(selectedOption => {
+
+                // comment will be inserted
+                if (selectedOption === userOptions[0]) {
                     formattedComment += "\n";                                            
                 
-                    // convert selection "starting point" to :Position type
                     let positionToInsert: vscode.Position =
-                        new vscode.Position(startLine, 0); 
+                        new vscode.Position(selection.start.line, 0); 
                         
-                    // use the editor builder class to stitch comment to their code
+                    // Stitch the comment to their code
                     editor.edit((editBuilder: vscode.TextEditorEdit) => {
                         editBuilder.insert(positionToInsert, formattedComment);
                     });
 
-                    // after inserting the comment, close the code previewer tab
                     (async () => {
                         await vscode.commands.executeCommand(
                             "workbench.action.closeActiveEditor"
                         );
                     })();
                     
-            // todo: Decide if user deserves response
-                    vscode.window.showInformationMessage("Cool");
+                    vscode.window.showInformationMessage("Operation Successful"); // todo: Decide if user deserves response
 
-                // leave editor open for the user
-                } else if (selection === userOptions[1]) {
-                    vscode.window.showInformationMessage("Sounds good, no worries");
+                // leave editor open 
+                } else if (selectedOption === userOptions[1]) {
+                    vscode.window.showInformationMessage("Lingering the Opertion");
                 
                 // Close the preview editor
                 } else {
@@ -119,7 +113,7 @@ export function activate(context: vscode.ExtensionContext) {
                     })();
                     
                     vscode.window.showInformationMessage(
-                        "Our apologies, sorry to bother you"
+                        "Cancelling Operation"
                     );
                 }
             });
