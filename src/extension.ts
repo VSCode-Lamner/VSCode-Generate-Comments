@@ -80,7 +80,7 @@ export function activate(context: vscode.ExtensionContext) {
                     ...userOptions
             ).then(selectedOption => {
 
-                // comment will be inserted
+                // Comment will be inserted
                 if (selectedOption === userOptions[0]) {
                     formattedComment += "\n";                                            
                 
@@ -100,7 +100,7 @@ export function activate(context: vscode.ExtensionContext) {
                     
                     vscode.window.showInformationMessage("Operation Successful"); // todo: Decide if user deserves response
 
-                // leave editor open 
+                // Leave editor open 
                 } else if (selectedOption === userOptions[1]) {
                     vscode.window.showInformationMessage("Lingering the Opertion");
                 
