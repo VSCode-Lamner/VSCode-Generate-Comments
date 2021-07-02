@@ -58,8 +58,6 @@ export function activate(context: vscode.ExtensionContext) {
                 modelResponseComment
             );
 
-            
-            
 
     //- --- --- --- --- ,,, --- ''' pXq ''' --- ,,, --- --- --- --- -//
 
@@ -70,107 +68,89 @@ export function activate(context: vscode.ExtensionContext) {
             editor.edit((editBuilder: vscode.TextEditorEdit) => {
                 editBuilder.insert(positionToInsert, formattedComment + "\n" );
             });
-
-
-            // creates decoration type
-            let decorationOptions: vscode.DecorationRenderOptions = {
-                backgroundColor: new vscode.ThemeColor("#FF0000")
-            };
-            let tempCommentDecType = vscode.window.createTextEditorDecorationType(
-                decorationOptions
+            
+            let highlightComment: vscode.ThemeColor = new vscode.ThemeColor(
+                "editor.selectionHighlightBackground"
             );
             
-
+            // creates decoration type
+            let tempCommentDecType = vscode.window.createTextEditorDecorationType({
+                backgroundColor: highlightComment
+            });
+            
             // comment here? or self documenting
             let splitComment: string[] = formattedComment.split("\n");
             let endOfCommentPosition: vscode.Position = new vscode.Position(
-                    splitComment.length, 
-                    splitComment[splitComment.length - 1].length + 1
+                splitComment.length + positionToInsert.line, 
+                0
             );
+
+            
             let commentRange: vscode.Range = new vscode.Range(
                 positionToInsert, endOfCommentPosition
             );
+
+            let emptyRange: vscode.Range[] = [];
             let ourRanges: vscode.Range[] = [];
             ourRanges.push(commentRange);
-            console.log("Ranges are: " + ourRanges[0].start, ourRanges[0].end);
+            // editorColorTheme.kind;
+            // console.log(editorColorTheme.kind);
+
+            // console.log(
+            //     "Ranges are: (" + 
+            //     ourRanges[0].start.line + 
+            //     ", " +
+            //     ourRanges[0].start.character +
+            //     ") - (" +
+            //     ourRanges[0].end.line +
+            //     ", " +
+            //     ourRanges[0].end.character +
+            //     ")");
 
             editor.setDecorations(
                 tempCommentDecType,
                 ourRanges
             );
 
-
-    //- --- --- --- --- ,,, --- ''' pXq ''' --- ,,, --- --- --- --- -//
-            // const previewDoc = await vscode.workspace.openTextDocument(
-            //     {language: documentLanguage, content: (
-            //         formattedComment + "\n" + selectedText
-            //     )}
-            // );
+            let userOptions: string[] = [
+                "Yes: Apply comment",
+                "No: Remove comment"
+            ];
             
-            // // Visually indicates what document looks like with the comment applied
-            // vscode.window.showTextDocument(
-            //     previewDoc, vscode.ViewColumn.Beside, false
-            // );
-            
-    //- --- --- --- --- ,,, --- ''' pXq ''' --- ,,, --- --- --- --- -//
+            // Give the user the options they have with the commented code preview
+            const selectedOption = await vscode.window.showInformationMessage(
+                    "Would you like to apply this comment?", 
+                    ...userOptions
+            ).then(selectedOption => {
 
-
-            // let userOptions: string[] = [
-            //     "Yes: Close editor",
-            //     "No: Leave open",
-            //     "No: Close editor"
-            // ];
-            
-            // // Give the user the options they have with the commented code preview
-            // const selectedOption = await vscode.window.showInformationMessage(
-            //         "Would you like to apply these changes?", 
-            //         ...userOptions
-            // ).then(selectedOption => {
-
-            //     // comment will be inserted
-            //     if (selectedOption === userOptions[0]) {
-            //         formattedComment += "\n";                                            
+                // comment will be inserted
+                if (selectedOption === userOptions[0]) {
+                    // formattedComment += "\n";                                            
                 
-
-
-            //     //- --- --- --- --- ,,, --- ''' pXq ''' --- ,,, --- --- --- --- -//
-
-            //         // let positionToInsert: vscode.Position =
-            //         //     new vscode.Position(selection.start.line, 0); 
-                        
-            //         // // Stitch the comment to their code
-            //         // editor.edit((editBuilder: vscode.TextEditorEdit) => {
-            //         //     editBuilder.insert(positionToInsert, formattedComment);
-            //         // });
-
-            //     //- --- --- --- --- ,,, --- ''' pXq ''' --- ,,, --- --- --- --- -//
-
-
-            //         (async () => {
-            //             await vscode.commands.executeCommand(
-            //                 "workbench.action.closeActiveEditor"
-            //             );
-            //         })();
-                    
-            //         vscode.window.showInformationMessage("Operation Successful"); // todo: Decide if user deserves response
-
-            //     // leave editor open 
-            //     } else if (selectedOption === userOptions[1]) {
-            //         vscode.window.showInformationMessage("Lingering the Opertion");
+                    editor.setDecorations(
+                        tempCommentDecType,
+                        emptyRange
+                    );
+                    vscode.window.showInformationMessage(
+                        "Comment Inserted"
+                    ); 
                 
-            //     // Close the preview editor
-            //     } else {
-            //         (async () => {
-            //             await vscode.commands.executeCommand(
-            //                 "workbench.action.closeActiveEditor"
-            //             );
-            //         })();
-                    
-            //         vscode.window.showInformationMessage(
-            //             "Cancelling Operation"
-            //         );
-            //     }
-            // });
+                // Comment will be removed
+                } else {
+                    editor.setDecorations(
+                        tempCommentDecType,
+                        emptyRange
+                    );
+
+                    editor.edit((editBuilder: vscode.TextEditorEdit) => {
+                        editBuilder.delete(commentRange);
+                    });
+
+                    vscode.window.showInformationMessage(
+                        "Comment Removed"
+                    );
+                }
+            });
         })();
     });
     context.subscriptions.push(disposable);
