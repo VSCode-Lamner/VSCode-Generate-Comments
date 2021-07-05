@@ -8,7 +8,8 @@ export interface ICodeLanguage {
 }
 
 export namespace ICodeLanguageNS {
-    
+    export const lineLengthMax: number = 80;
+
     type Constructor<T> = {
         new(...args: any[]): T;
         readonly prototype: T;
@@ -26,18 +27,17 @@ export namespace ICodeLanguageNS {
 
 @ICodeLanguageNS.register
 class Cpp implements ICodeLanguage {
-
     _languageID: string = "cpp";
     
     getName(): string { return this._languageID; }
     
     getCommentStyle (comment: string): string {
-        if (comment.length > 80) {
+        if (comment.length > ICodeLanguageNS.lineLengthMax) {
             let temp: string[] = comment.split(" ");
             let retComment: string = "/*\n *";
             let lineLength: number = 0;
             temp.forEach(word => {
-                if ( (lineLength < 80) && (lineLength + word.length <= 80) ) {
+                if ( (lineLength < ICodeLanguageNS.lineLengthMax) && (lineLength + word.length <= ICodeLanguageNS.lineLengthMax) ) {
                     retComment += " " + word;
                     lineLength += word.length + 1;
                 } else {
@@ -61,12 +61,12 @@ class Java implements ICodeLanguage {
     getName(): string { return this._languageID; }
     
     getCommentStyle (comment: string): string {
-        if (comment.length > 80) {
+        if (comment.length > ICodeLanguageNS.lineLengthMax) {
             let temp: string[] = comment.split(" ");
             let retComment: string = "/*\n *";
             let lineLength: number = 0;
             temp.forEach(word => {
-                if ( (lineLength < 80) && (lineLength + word.length <= 80) ) {
+                if ( (lineLength < ICodeLanguageNS.lineLengthMax) && (lineLength + word.length <= ICodeLanguageNS.lineLengthMax) ) {
                     retComment += " " + word;
                     lineLength += word.length + 1;
                 } else {
@@ -90,12 +90,12 @@ class Php implements ICodeLanguage {
     getName(): string { return this._languageID; }
     
     getCommentStyle (comment: string): string {
-        if (comment.length > 80) {
+        if (comment.length > ICodeLanguageNS.lineLengthMax) {
             let temp: string[] = comment.split(" ");
             let retComment: string = "/*\n *";
             let lineLength: number = 0;
             temp.forEach(word => {
-                if ( (lineLength < 80) && (lineLength + word.length <= 80) ) {
+                if ( (lineLength < ICodeLanguageNS.lineLengthMax) && (lineLength + word.length <= ICodeLanguageNS.lineLengthMax) ) {
                     retComment += " " + word;
                     lineLength += word.length + 1;
                 } else {
@@ -119,12 +119,12 @@ class Csharp implements ICodeLanguage {
     getName(): string { return this._languageID; }
     
     getCommentStyle (comment: string): string {
-        if (comment.length > 80) {
+        if (comment.length > ICodeLanguageNS.lineLengthMax) {
             let temp: string[] = comment.split(" ");
             let retComment: string = "/*\n *";
             let lineLength: number = 0;
             temp.forEach(word => {
-                if ( (lineLength < 80) && (lineLength + word.length <= 80) ) {
+                if ( (lineLength < ICodeLanguageNS.lineLengthMax) && (lineLength + word.length <= ICodeLanguageNS.lineLengthMax) ) {
                     retComment += " " + word;
                     lineLength += word.length + 1;
                 } else {
@@ -148,12 +148,12 @@ class Go implements ICodeLanguage {
     getName(): string { return this._languageID; }
     
     getCommentStyle (comment: string): string {
-        if (comment.length > 80) {
+        if (comment.length > ICodeLanguageNS.lineLengthMax) {
             let temp: string[] = comment.split(" ");
             let retComment: string = "/*\n *";
             let lineLength: number = 0;
             temp.forEach(word => {
-                if ( (lineLength < 80) && (lineLength + word.length <= 80) ) {
+                if ( (lineLength < ICodeLanguageNS.lineLengthMax) && (lineLength + word.length <= ICodeLanguageNS.lineLengthMax) ) {
                     retComment += " " + word;
                     lineLength += word.length + 1;
                 } else {
@@ -177,12 +177,12 @@ class C implements ICodeLanguage {
     getName(): string { return this._languageID; }
     
     getCommentStyle (comment: string): string {
-        if (comment.length > 80) {
+        if (comment.length > ICodeLanguageNS.lineLengthMax) {
             let temp: string[] = comment.split(" ");
             let retComment: string = "/*\n *";
             let lineLength: number = 0;
             temp.forEach(word => {
-                if ( (lineLength < 80) && (lineLength + word.length <= 80) ) {
+                if ( (lineLength < ICodeLanguageNS.lineLengthMax) && (lineLength + word.length <= ICodeLanguageNS.lineLengthMax) ) {
                     retComment += " " + word;
                     lineLength += word.length + 1;
                 } else {

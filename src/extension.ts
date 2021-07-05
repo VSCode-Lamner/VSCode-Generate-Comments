@@ -58,7 +58,6 @@ export function activate(context: vscode.ExtensionContext) {
                 modelResponseComment
             );
 
-
     //- --- --- --- --- ,,, --- ''' pXq ''' --- ,,, --- --- --- --- -//
 
             let positionToInsert: vscode.Position =
