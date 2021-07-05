@@ -85,7 +85,6 @@ export function activate(context: vscode.ExtensionContext) {
                 0
             );
 
-            
             let commentRange: vscode.Range = new vscode.Range(
                 positionToInsert, endOfCommentPosition
             );
