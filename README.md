@@ -1,73 +1,58 @@
 # vsgencomments README
 
-This is the README for your extension "vsgencomments". After writing up a brief description, we recommend including the following sections.
+This extension interfaces with a server-based AI model that returns a text comment describing a function
+passed to the model as a parameter.
+\
+&nbsp;
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- Currently produces one function level comment for a singly selected Java function per execution
 
-For example if there is an image subfolder under your extension project workspace:
+- Presents the user with an in-text preview with a continue/cancel prompt
 
-<div align="center">
-  <img height="500" src="./documentation/vscode-extension-demo.gif">
-</div>
+> Use the keyboard combination of &nbsp;`CTRL + ALT + ;` to generate the comment
 
+&nbsp;
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+![vsgen-gif](./documentation/vscode-extension-demo.gif)
+
+&nbsp;
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+Please refer to the [following](https://github.com/Nathan-Nesbitt/CodeSummary) README, in order to properly configure the model prior to using the extension.
+\
+&nbsp;
 
-## Extension Settings
+## Development Enviorment
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+1. Clone repository
+2. Make sure to follow the #[Requirments](#requirements) section to properly run the server to load in the lamner model
+3. Run npm install to get all of the needed depdencies
+4. Open up a terminal instance in VSCode, and type in `npm run watch`
+5. Hit `F5` to go into debug mode
+6. Select your desired function, and run the extesion command
 
-For example:
+\
+&nbsp;
 
-This extension contributes the following settings:
+## Extension Settings, Commands
 
-* `myExtension.enable`: enable/disable this extension
-* `myExtension.thing`: set to `blah` to do something
+This extension contributes the following palette commands:
+
+- 'vsgencomments.insertComment': executes the model using the currently selected text
+\
+&nbsp;
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+No known issues to date
+\
+&nbsp;
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
+### 0.0.1
 
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
------------------------------------------------------------------------------------------------------------
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-**Note:** You can author your README using Visual Studio Code.  Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux)
-* Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
-* Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
-
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+Initial development release of VSGencomments
