@@ -25,14 +25,14 @@ Please refer to the [following](https://github.com/Nathan-Nesbitt/CodeSummary) R
 \
 &nbsp;
 
-## Development Enviorment
+## Development Environment
 
 1. Clone repository
 2. Make sure to follow the #[Requirements](#requirements) section to properly run the server to load in the lamner model
-3. Run npm install to get all of the needed depdencies
+3. Run npm install to get all of the needed dependencies
 4. Open up a terminal instance in VSCode, and type in `npm run watch`
 5. Hit `F5` to go into debug mode
-6. Select your desired function, and run the extesion command
+6. Select your desired function, and run the extension command
 \
 &nbsp;
 
