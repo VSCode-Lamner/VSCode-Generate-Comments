@@ -33,7 +33,6 @@ Please refer to the [following](https://github.com/Nathan-Nesbitt/CodeSummary) R
 4. Open up a terminal instance in VSCode, and type in `npm run watch`
 5. Hit `F5` to go into debug mode
 6. Select your desired function, and run the extesion command
-
 \
 &nbsp;
 
