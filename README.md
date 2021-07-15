@@ -1,5 +1,7 @@
 # vsgencomments README
 
+[![made-for-VSCode](https://img.shields.io/badge/Made%20for-VSCode-1f425f.svg)](https://code.visualstudio.com/)
+
 This extension interfaces with a server-based AI model that returns a text comment describing a function
 passed to the model as a parameter.
 \
