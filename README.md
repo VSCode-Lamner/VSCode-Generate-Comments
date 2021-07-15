@@ -22,7 +22,10 @@ passed to the model as a parameter.
 ## Requirements
 
 Please refer to the [following](https://github.com/Nathan-Nesbitt/CodeSummary) README, in order to properly configure the model prior to using the extension.
-\
+
+Please have Node.js installed, you can check out the documentation [here](https://nodejs.org/en/)
+
+Please have Python installed, you can check out the documentation [here](https://www.python.org/downloads/)
 &nbsp;
 
 ## Development Environment
