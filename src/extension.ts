@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import { ICodeLanguageNS } from "./language-interface-registry";
 import fetch from 'cross-fetch';
-import { lchmod } from "fs";
+// import { lchmod } from "fs";
 
 export function activate(context: vscode.ExtensionContext) {
     console.log('Congratulations, your extension "vsgencomments" is now active!'); // Todo: Remove in final product (prior to publishing)
@@ -14,7 +14,7 @@ export function activate(context: vscode.ExtensionContext) {
     languageRegistry.forEach(language => {
         let temp = new language;
         languageFactory.set(temp.getName(), temp);
-        console.log(temp.getName()); // Todo: Remove in final product (prior to publishing)
+        // console.log(temp.getName()); // Debug Statement 
     });
 
     let disposable = vscode.commands.registerCommand(
@@ -45,7 +45,7 @@ export function activate(context: vscode.ExtensionContext) {
                     modelResponseJSON = await modelResponse.json();
                     modelResponseComment = modelResponseJSON["response"];
 
-                    console.log(modelResponseComment); // Todo: Remove in final product (prior to publishing) 
+                    // console.log(modelResponseComment); // Debug Statement 
 
                 } catch (err) {
                     console.error(err);
@@ -57,8 +57,6 @@ export function activate(context: vscode.ExtensionContext) {
                 let formattedComment: string = languageObject.getCommentStyle(
                     modelResponseComment
                 );
-
-                //- --- --- --- --- ,,, --- ''' pXq ''' --- ,,, --- --- --- --- -//
 
                 let positionToInsert: vscode.Position =
                     new vscode.Position(selection.start.line, 0);
@@ -91,19 +89,6 @@ export function activate(context: vscode.ExtensionContext) {
                 let emptyRange: vscode.Range[] = [];
                 let ourRanges: vscode.Range[] = [];
                 ourRanges.push(commentRange);
-                // editorColorTheme.kind;
-                // console.log(editorColorTheme.kind);
-
-                // console.log(
-                //     "Ranges are: (" + 
-                //     ourRanges[0].start.line + 
-                //     ", " +
-                //     ourRanges[0].start.character +
-                //     ") - (" +
-                //     ourRanges[0].end.line +
-                //     ", " +
-                //     ourRanges[0].end.character +
-                //     ")");
 
                 editor.setDecorations(
                     tempCommentDecType,
