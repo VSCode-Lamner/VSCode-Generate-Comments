@@ -1,7 +1,6 @@
 import * as vscode from "vscode";
 import { ICodeLanguageNS } from "./language-interface-registry";
 import fetch from 'cross-fetch';
-// import { lchmod } from "fs";
 
 export function activate(context: vscode.ExtensionContext) {
     console.log('Congratulations, your extension "vsgencomments" is now active!'); // Todo: Remove in final product (prior to publishing)
