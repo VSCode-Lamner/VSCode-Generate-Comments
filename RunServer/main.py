@@ -1,6 +1,9 @@
 from tkinter import *
-import os
 import subprocess
+from sys import platform
+
+server = None 
+venv = None
 
 # Function to display correct button
 def clicked():
@@ -14,22 +17,28 @@ def clicked():
 
 
 def RunServer(port):
-    print(f"Running server on port {port}")
-    # print("Running server on {0}".format(port))
-    # todo: add code to run on port
+    # print(f"Running server on port {port}")
+    print("Running server on {0}".format(port))
     venv = subprocess.Popen(["python", "-m", "venv", "venv"])
-    vactive = subprocess.run([".", "venv\\bin\\activate", ".\\venv\\Scripts\\activate"])
-    pipInstall = subprocess.Popen(["pip", "install", "."])
-    enviornmentVariable = subprocess.Popen(["$env:FLASK_APP", "=", '"main:server"'])
-    process = subprocess.Popen(["python", "RunServer.py", "8080"])
-
-    return
+    subprocess.run(
+        ( ['.\\venv\\Scripts\\activate'], ['.', 'venv/bin/activate'] )[
+            platform == 'darwin'
+        ]
+    )
+    subprocess.run(["pip", "install", "."])
+    subprocess.run(
+        ( ["$env:FLASK_APP", "=", '"main:server"'], ['export', 'FLASK_APP=main:server'] )[
+            platform == 'darwin'
+        ]
+    )
+    # server = subprocess.Popen(["flask", "run", "--port", "{0}".format(port)])
+    server = subprocess.Popen(["flask", "run", "--port", "3000"])
 
 
 def shutdownServer():
     print("Shutting down the server")
-    # todo: shut server down
-    return
+    server.kill()
+    venv.kill()
 
 
 ## Create Window
