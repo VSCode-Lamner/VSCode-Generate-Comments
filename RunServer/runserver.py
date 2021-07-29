@@ -2,13 +2,12 @@ from tkinter import *
 import subprocess, sys, os
 
 
-def main ():
+def main():
     lamner = ServerRunner()
 
 
-class ServerRunner ():
-
-    def __init__(self) :
+class ServerRunner:
+    def __init__(self):
         ## Create Window
         self.window = Tk()
         self.window.title("Hello Lamner!!")
@@ -20,11 +19,17 @@ class ServerRunner ():
         self.portTextField = Entry(self.window, width=6, font=("Georgia", 35))
 
         self.serverButton = Button(
-           self.window, text="Start Server", command=self.ServerClick, font=("Georgia", 20)
-        )  
+            self.window,
+            text="Start Server",
+            command=self.ServerClick,
+            font=("Georgia", 20),
+        )
 
         self.installButton = Button(
-            self.window, text = 'Install Server', command=self.InstallClick, font = ('Gerogia', 20)
+            self.window,
+            text="Install Server",
+            command=self.InstallClick,
+            font=("Gerogia", 20),
         )
 
         ## Position UI Elements
@@ -38,9 +43,8 @@ class ServerRunner ():
 
         self.window.mainloop()
 
-
     # Function to display correct button
-    def ServerClick (self):
+    def ServerClick(self):
         if self.serverButton.cget("text") == "Start Server":
             self.serverButton.configure(text="End Server")
             port = self.portTextField.get()
@@ -49,27 +53,29 @@ class ServerRunner ():
             self.serverButton.configure(text="Start Server")
             self.ShutdownServer()
 
-
-    def InstallClick (self):
+    def InstallClick(self):
         print("Installing virtual Environment")
         # os.system('python -m venv venv & .\\venv\\Scripts\\activate ; pip install . ; deactivate')
-        print('starting pip install: this process may take some time')
-        self.messageLabel.configure(text="pip install in progress: this process may take some time")
+        print("starting pip install: this process may take some time")
+        self.messageLabel.configure(
+            text="pip install in progress: this process may take some time"
+        )
         os.system("py -m venv venv")
         os.system(".\\venv\\Scripts\\pip.exe install .")
         os.system(".\\venv\\Scripts\\pip.exe install python-dotenv")
         with open(".env", "w") as env:
             env.write('FLASK_APP = "main:server"')
-        print('end pipping')
-        self.messageLabel.configure(text="pip install complete, click 'run server' button")
+        print("end pipping")
+        self.messageLabel.configure(
+            text="pip install complete, click 'run server' button"
+        )
 
-
-
-    def RunServer (self, port):
+    def RunServer(self, port):
         print("Running server on {0}".format(port))
-        self.server = subprocess.Popen(['.\\venv\\Scripts\\flask.exe', 'run', '--port', '3000'])
-        print ("we're done!")
-
+        self.server = subprocess.Popen(
+            [".\\venv\\Scripts\\flask.exe", "run", "--port", "3000"]
+        )
+        print("we're done!")
 
     def ShutdownServer(self):
         print("Shutting down the server")
@@ -77,5 +83,3 @@ class ServerRunner ():
 
 
 main()
-
-
