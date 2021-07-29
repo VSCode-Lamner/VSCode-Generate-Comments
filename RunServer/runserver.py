@@ -55,7 +55,6 @@ class ServerRunner:
 
     def InstallClick(self):
         print("Installing virtual Environment")
-        # os.system('python -m venv venv & .\\venv\\Scripts\\activate ; pip install . ; deactivate')
         print("starting pip install: this process may take some time")
         self.messageLabel.configure(
             text="pip install in progress: this process may take some time"
