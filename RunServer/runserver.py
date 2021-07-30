@@ -1,7 +1,6 @@
 from tkinter import *
 import subprocess, sys, os
-from time import sleep
-import asyncio
+import _thread
 
 
 
@@ -47,7 +46,6 @@ class ServerRunner:
             pady=4
         )
 
-        # Grid.grid_configure(self.window, padx=4, pady=4)
 
         ## Position UI Elements
         self.portLabel.grid(column=0, row=0)
@@ -69,8 +67,8 @@ class ServerRunner:
 
             if ( 
                 len(port) == 0 
-                or type(port) != int
-                or port < 0
+                or not port.isdigit()
+                or (port := int(port)) < 0
                 or port > 65535
             ): port = 3000
 
@@ -79,25 +77,19 @@ class ServerRunner:
             self.serverButton.configure(text="Start Server", bg="#5cb85c")
             self.ShutdownServer()
 
+
     def InstallClick(self):
         print("Installing virtual Environment")
         print("starting pip install: this process may take some time")
         self.messageLabel.configure(
             text="pip install in progress: this process may take some time"
         )
-        asyncio.loop.run_until_complete(asyncio.loop.create_task(self.PipInstall()))
+
+        _thread.start_new_thread(self.PipInstall, ())
         
 
-
-    async def PipInstall (self):
-        await asyncio.sleep(5)
+    def PipInstall (self):
         os.system("py -m venv venv")
-        # temp = subprocess.Popen(['py', '-m', 'venv', 'venv'])
-        # temp = subprocess.Popen(['.\\venv\\Scripts\\pip.exe', 'install', '.'])
-        # temp = subprocess.Popen(['.\\venv\\Scripts\\pip.exe', 'install', 'python-dotenv'])
-        # temp = subprocess.Popen(['py', '-m', 'venv', 'venv'])
-        # temp = subprocess.Popen(['.\\venv\\Scripts\\pip.exe', 'install', '.'])
-        # temp = subprocess.Popen(['.\\venv\\Scripts\\pip.exe', 'install', 'python-dotenv'])
         os.system(".\\venv\\Scripts\\pip.exe install .")
         os.system(".\\venv\\Scripts\\pip.exe install python-dotenv")
         with open(".env", "w") as env:
@@ -107,16 +99,17 @@ class ServerRunner:
             text="pip install complete, click 'run server' button"
         )
 
+
     def RunServer(self, port):
         print("Running server on {0}".format(port))
         self.messageLabel.configure(
-            # text="pip install in progress: this process may take some time"
             text="Server is Running"
         )
         self.server = subprocess.Popen(
             [".\\venv\\Scripts\\flask.exe", "run", "--port", "3000"]
         )
         print("we're done!")
+
 
     def ShutdownServer(self):
         print("Shutting down the server")
