@@ -1,127 +1,101 @@
-from tkinter import *
-import subprocess, sys, os
+import subprocess
+import sys
+import os
 import _thread
 
 
-
 def main():
+
     lamner = ServerRunner()
+    print(sys.argv[1])
+    func = lamner.pickArgs(sys.argv[1])
+    func()
 
 
 class ServerRunner:
     def __init__(self):
-        ## Create Window
-        self.window = Tk()
-        self.window.title("Hello Lamner!!")
-        self.window.geometry("750x250")
-        self.window.protocol('WM_DELETE_WINDOW', self.OnExit)
-
         self.server = None
-
-        ## Create UI Elements
-        self.portLabel = Label(self.window, text="Choose Port #", font=("Georgia", 30))
-        self.defPortLabel = Label(self.window, text="Default port is 3000", font=("Georgia", 18))
-        self.messageLabel = Message(self.window, anchor="w", width=400, text="", font=("Georgia", 16))
-        self.portTextField = Entry(self.window, width=6, font=("Georgia", 35))
-
-        self.serverButton = Button(
-            self.window,
-            text="Start Server",
-            command=self.ServerClick,
-            font=("Georgia", 20),
-            bg="#5cb85c",
-            borderwidth=4,
-            padx=4,
-            pady=4
-        )
-
-        self.installButton = Button(
-            self.window,
-            text="Install Server",
-            command=self.InstallClick,
-            font=("Gerogia", 20),
-            bg="#0275d8",
-            borderwidth=4,
-            padx=4,
-            pady=4
-        )
-
-
-        ## Position UI Elements
-        self.portLabel.grid(column=0, row=0)
-        self.portTextField.grid(column=1, row=0)
-        self.defPortLabel.grid(column=2, row=0)
-        self.serverButton.grid(column=0, row=1, pady=(50, 15))
-        self.installButton.grid(column=2, row=1, pady=(50, 15))
-        self.messageLabel.grid(column=0, row=2, sticky="w", columnspan=3)
-
-        self.portTextField.focus()
-
-        self.window.mainloop()
+        self.port = 3000
+        self.location = ""
 
     # Function to display correct button
-    def ServerClick(self):
-        if self.serverButton.cget("text") == "Start Server":
-            self.serverButton.configure(text="End Server", bg="#d9534f")
-            port = self.portTextField.get()
+    def ServerArg(self):
+        # if (
+        #     len(port) == 0
+        #     or not port.isdigit()
+        #     or (port := int(port)) < 0
+        #     or port > 65535
+        # ):
+        #     port = 3000
+        self.RunServer(self.port)
 
-            if ( 
-                len(port) == 0 
-                or not port.isdigit()
-                or (port := int(port)) < 0
-                or port > 65535
-            ): port = 3000
+    def ShutdownArg(self):
+        print("Shutting down the server")
+        self.server.kill()
 
-            self.RunServer(port)
-        else:
-            self.serverButton.configure(text="Start Server", bg="#5cb85c")
-            self.ShutdownServer()
+    # def InstallArg(self):
+    #     print("Installing virtual Environment")
+    #     print("starting pip install: this process may take some time")
 
+    #     _thread.start_new_thread(self.PipInstall, ())
 
-    def InstallClick(self):
-        print("Installing virtual Environment")
-        print("starting pip install: this process may take some time")
-        self.messageLabel.configure(
-            text="pip install in progress: this process may take some time"
+    def PipInstall(self):
+        os.system("pip install git+https://github.com/Nathan-Nesbitt/CodeSummary")
+        currLoc = os.path.abspath(__file__)[:-len("runserver.py")]
+        os.chdir("C:\\")
+        pipout = subprocess.Popen(
+            ["pip", "show", "codesummary"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
         )
 
-        _thread.start_new_thread(self.PipInstall, ())
-        
+        codeSummaryJSON, temp = pipout.communicate()
+        print(self.location)
+        start = str(codeSummaryJSON).find('Location: ') + len('Location: ')
+        end = str(codeSummaryJSON).find('Requires: ')
+        self.location = str(codeSummaryJSON)[start:end - 4]
+        print(self.location)
 
-    def PipInstall (self):
-        os.system("py -m venv venv")
-        os.system(".\\venv\\Scripts\\pip.exe install .")
-        os.system(".\\venv\\Scripts\\pip.exe install python-dotenv")
-        with open(".env", "w") as env:
+        os.chdir(f"{self.location}\\CodeSummary")
+
+        os.system("mkdir CodeSummary")
+        os.system("move models CodeSummary")
+        os.system("move server CodeSummary")
+        os.system("move Examples.py CodeSummary")
+
+        os.system(f"cp {currLoc}\\main.py .")
+        os.system(f"cp {currLoc}\\setup.py .")
+        os.system(f"cp {currLoc}\\pyproject.toml .")
+        os.system(f"cp {currLoc}\\README.md .")
+
+        os.system(f"python -m venv {self.location}\\venv")
+        os.system(f"{self.location}\\venv\\Scripts\\pip.exe install .")
+        os.system(
+            f"{self.location}\\venv\\Scripts\\pip.exe install python-dotenv")
+        with open(f"{self.location}\\.env", "w") as env:
             env.write('FLASK_APP = "main:server"')
         print("end pipping")
-        self.messageLabel.configure(
-            text="pip install complete, click 'run server' button"
-        )
-
 
     def RunServer(self, port):
         print("Running server on {0}".format(port))
-        self.messageLabel.configure(
-            text="Server is Running"
-        )
         self.server = subprocess.Popen(
-            [".\\venv\\Scripts\\flask.exe", "run", "--port", "3000"]
+            [f"{self.location}\\venv\\Scripts\\flask.exe", "run", "--port", "3000"]
         )
         print("we're done!")
 
-
-    def ShutdownServer(self):
-        print("Shutting down the server")
-        self.messageLabel.configure(
-            text="Server is shut down"
-        )
-        self.server.kill()
-
-
-    def OnExit(self):
-        if (self.server): self.server.kill()
-        self.window.destroy()
+    def pickArgs(self, op):
+        switch = {
+            'install': self.PipInstall,
+            'run': self.ServerArg,
+            'shutdown': self.ShutdownArg,
+        }
+        return switch.get(op, "show me this instead!")
+        # if (op == 'install'):
+        #     self.PipInstall()
+        # elif (op == 'run'):
+        #     self.RunServer()
+        # elif (op == 'shutdown'):
+        #     self.ShutdownArg()
 
 
 main()
