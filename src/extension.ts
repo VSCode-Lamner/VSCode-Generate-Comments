@@ -1,10 +1,17 @@
 import * as vscode from "vscode";
 import { ICodeLanguageNS } from "./language-interface-registry";
 import fetch from 'cross-fetch';
+const cp = require('child_process');
 
 export function activate(context: vscode.ExtensionContext) {
     console.log('Congratulations, your extension "vsgencomments" is now active!'); // Todo: Remove in final product (prior to publishing)
     vscode.window.showInformationMessage("Extension is running"); // Todo: Remove in final product (prior to publishing)
+    let portNumber: string = "";
+    // Show input box to store a variable number
+    vscode.window.showInputBox({ prompt: "Which port is the server running on?", placeHolder: "Enter a port number" }).then(value => {
+        // Store the value in the variable
+        portNumber = String(value);
+    });
 
     // Adding predefined languages to factory simplifies software extensibility
     let languageRegistry = ICodeLanguageNS.getImplementations();
@@ -16,6 +23,8 @@ export function activate(context: vscode.ExtensionContext) {
         // console.log(temp.getName()); // Debug Statement 
     });
 
+
+    // Insert Comment Command
     let disposable = vscode.commands.registerCommand(
         "vsgencomments.insertComment",
         () => {
@@ -134,7 +143,28 @@ export function activate(context: vscode.ExtensionContext) {
                     }
                 });
             })();
-        });
+        }); // End Insert Comment Command
     context.subscriptions.push(disposable);
+
+
+    // Will only be done the first time. 
+    // Install Server Command
+    //  open a terminal instance
+    //  send text to 'pip install git+https://github.com/Nathan-Nesbitt/CodeSummary
+    //  run our python script 'py our.py install' to pip install in venv
+
+
+    //  Run server Command
+    //  run python script 'py our.py runserver'
+
+    //  Stop Server command
+    //  run python script 'py our.py stopserver'
+
+
+    // Swap online/local Server destination Command
+    // need a global var used in 'insert' command that alternated with each use
+
+
+
 }
 export function deactivate() { }

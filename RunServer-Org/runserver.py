@@ -21,14 +21,14 @@ class ServerRunner:
         self.currLoc = os.path.abspath(__file__)[:-len("runserver.py")]
         os.chdir("C:\\")
         pipout = subprocess.Popen(
-            ["pip", "list", "-v"],
+            ["pip", "show", "codesummary"],
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
         )
-        pipLocations, temp = pipout.communicate()
-        lines = pipLocations.split(b'\n')
-        self.location = str(lines[2])[str(lines[2]).find(
-            "c:"):str(lines[2]).rfind(' ')]
+        codeSummaryJSON, temp = pipout.communicate()
+        start = str(codeSummaryJSON).find('Location: ') + len('Location: ')
+        end = str(codeSummaryJSON).find('Requires: ')
+        self.location = str(codeSummaryJSON)[start:end - 4]
 
     # Function to display correct button
     def ServerArg(self):
@@ -46,15 +46,29 @@ class ServerRunner:
         self.server.kill()
 
     def PipInstall(self):
-        os.chdir(f"{self.location}")
-        os.system("git clone https://github.com/Nathan-Nesbitt/CodeSummary.git")
+        # os.system("pip install git+https://github.com/Nathan-Nesbitt/CodeSummary")
+
         os.chdir(f"{self.location}\\CodeSummary")
+
+        os.system("mkdir CodeSummary")
+        os.system("move models CodeSummary")
+        os.system("move server CodeSummary")
+        os.system("move Examples.py CodeSummary")
+
+        os.system(f"cp {self.currLoc}\\main.py .")
+        os.system(f"cp {self.currLoc}\\setup.py .")
+        os.system(f"cp {self.currLoc}\\pyproject.toml .")
+        os.system(f"cp {self.currLoc}\\README.md .")
+        os.system(f"cp {self.currLoc}\\docker-compose.yml .")
+        os.system(f"cp {self.currLoc}\\Dockerfile .")
+        os.system(f"cp {self.currLoc}\\gunicorn.sh .")
+        os.system(f"cp {self.currLoc}\\.env .")
+
         os.system("python -m venv venv")
         os.system(".\\venv\\Scripts\\pip.exe install .")
         os.system(
             ".\\venv\\Scripts\\pip.exe install python-dotenv"
         )
-        os.system(f"cp {self.currLoc}\\.env .")
         print("end pipping")
 
     def RunServer(self, port):
@@ -66,15 +80,11 @@ class ServerRunner:
         )
         print("we're done!")
 
-    def DoNothing(self):
-        pass
-
     def pickArgs(self, op):
         switch = {
             'install': self.PipInstall,
             'run': self.ServerArg,
             'shutdown': self.ShutdownArg,
-            'test': self.DoNothing
         }
         return switch.get(op, "show me this instead!")
 
