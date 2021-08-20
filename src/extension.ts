@@ -39,12 +39,19 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     let runCommand = vscode.commands.registerCommand("vsgencomments.run", () => {
-        vscode.window.showInputBox({ prompt: "Which port should the server run on?", value: "3000" }).then(value => {
+        vscode.window.showInputBox(
+            { prompt: "Which port should the server run on?", value: "3000" }
+        ).then(value => {
             portNumber = String(value);
             if (genTerminal) { genTerminal.dispose(); }
             genTerminal = vscode.window.createTerminal('VSGenComments');
             genTerminal.show(true);
-            genTerminal.sendText('python ' + dirName + '..\\\\src\\\\runserver.py run ' + portNumber);
+            genTerminal.sendText(
+                'python '
+                + dirName
+                + '..\\\\src\\\\runserver.py run '
+                + portNumber
+            );
         });
     });
 
@@ -62,13 +69,18 @@ export function activate(context: vscode.ExtensionContext) {
 
             (async () => {
                 try {
-                    const modelResponse = await fetch('http://localhost:' + portNumber + '/models/lamner', {
-                        method: 'post',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        body: "input=" + selectedText
-                    });
+                    const modelResponse = await fetch(
+                        'http://localhost:'
+                        + portNumber
+                        + '/models/lamner',
+                        {
+                            method: 'post',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: "input=" + selectedText
+                        }
+                    );
 
                     if (modelResponse.status >= 400) {
                         throw new Error("Bad response from server");
