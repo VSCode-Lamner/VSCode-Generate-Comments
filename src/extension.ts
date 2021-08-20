@@ -6,12 +6,11 @@ const cp = require('child_process');
 export function activate(context: vscode.ExtensionContext) {
     console.log('Congratulations, your extension "vsgencomments" is now active!'); // Todo: Remove in final product (prior to publishing)
     vscode.window.showInformationMessage("Extension is running"); // Todo: Remove in final product (prior to publishing)
-    // let portNumber: string = "";
-    // // Show input box to store a variable number
-    // vscode.window.showInputBox({ prompt: "Which port is the server running on?", placeHolder: "Enter a port number" }).then(value => {
-    //     // Store the value in the variable
-    //     portNumber = String(value);
-    // });
+
+    //----- IF time permits
+    // Swap online/local Server destination Command
+    // need a global var used for fetch request in 'insert' command that alternated with each use of the switch command
+
 
     // Adding predefined languages to factory simplifies software extensibility
     let languageRegistry = ICodeLanguageNS.getImplementations();
@@ -30,6 +29,7 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     let genTerminal: vscode.Terminal;
+    let portNumber: string = "";
 
     let installCommand = vscode.commands.registerCommand("vsgencomments.install", () => {
         if (genTerminal) { genTerminal.dispose(); }
@@ -39,10 +39,13 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     let runCommand = vscode.commands.registerCommand("vsgencomments.run", () => {
-        if (genTerminal) { genTerminal.dispose(); }
-        genTerminal = vscode.window.createTerminal('VSGenComments');
-        genTerminal.show(true);
-        genTerminal.sendText('python ' + dirName + '..\\\\src\\\\runserver.py run');
+        vscode.window.showInputBox({ prompt: "Which port should the server run on?", value: "3000" }).then(value => {
+            portNumber = String(value);
+            if (genTerminal) { genTerminal.dispose(); }
+            genTerminal = vscode.window.createTerminal('VSGenComments');
+            genTerminal.show(true);
+            genTerminal.sendText('python ' + dirName + '..\\\\src\\\\runserver.py run ' + portNumber);
+        });
     });
 
     // Insert Comment Command
@@ -59,7 +62,7 @@ export function activate(context: vscode.ExtensionContext) {
 
             (async () => {
                 try {
-                    const modelResponse = await fetch('http://localhost:3000/models/lamner', {
+                    const modelResponse = await fetch('http://localhost:' + portNumber + '/models/lamner', {
                         method: 'post',
                         headers: {
                             'Content-Type': 'application/x-www-form-urlencoded'
@@ -169,14 +172,9 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(installCommand);
     context.subscriptions.push(runCommand);
 
-    // Swap online/local Server destination Command
-    // need a global var used in 'insert' command that alternated with each use
-
     // 0. Go over extension comments (us)
     // 1. Update README (user guide)
     // 2. Technical Documentation (prof)
 
 }
-export function deactivate() {
-
-}
+export function deactivate() { }

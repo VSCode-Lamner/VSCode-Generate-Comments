@@ -1,10 +1,11 @@
 // import "./codeLangauge_cpp";
+// SOURCE: https://stackoverflow.com/questions/47082026/typescript-get-all-implementations-of-interface
 
 export interface ICodeLanguage {
     _languageID: string;
-    
-    getName(): string; 
-    getCommentStyle (ccomment: string) : string; 
+
+    getName(): string;
+    getCommentStyle(ccomment: string): string;
 }
 
 export namespace ICodeLanguageNS {
@@ -14,7 +15,7 @@ export namespace ICodeLanguageNS {
         new(...args: any[]): T;
         readonly prototype: T;
     };
-    
+
     const implementations: Constructor<ICodeLanguage>[] = [];
     export function getImplementations(): Constructor<ICodeLanguage>[] {
         return implementations;
@@ -28,16 +29,16 @@ export namespace ICodeLanguageNS {
 @ICodeLanguageNS.register
 class Cpp implements ICodeLanguage {
     _languageID: string = "cpp";
-    
+
     getName(): string { return this._languageID; }
-    
-    getCommentStyle (comment: string): string {
+
+    getCommentStyle(comment: string): string {
         if (comment.length > ICodeLanguageNS.lineLengthMax) {
             let temp: string[] = comment.split(" ");
             let retComment: string = "/*\n *";
             let lineLength: number = 0;
             temp.forEach(word => {
-                if ( (lineLength < ICodeLanguageNS.lineLengthMax) && (lineLength + word.length <= ICodeLanguageNS.lineLengthMax) ) {
+                if ((lineLength < ICodeLanguageNS.lineLengthMax) && (lineLength + word.length <= ICodeLanguageNS.lineLengthMax)) {
                     retComment += " " + word;
                     lineLength += word.length + 1;
                 } else {
@@ -49,7 +50,7 @@ class Cpp implements ICodeLanguage {
 
         } else {
             return "// " + comment;
-        }  
+        }
     }
 }
 
@@ -57,16 +58,16 @@ class Cpp implements ICodeLanguage {
 class Java implements ICodeLanguage {
 
     _languageID: string = "java";
-    
+
     getName(): string { return this._languageID; }
-    
-    getCommentStyle (comment: string): string {
+
+    getCommentStyle(comment: string): string {
         if (comment.length > ICodeLanguageNS.lineLengthMax) {
             let temp: string[] = comment.split(" ");
             let retComment: string = "/*\n *";
             let lineLength: number = 0;
             temp.forEach(word => {
-                if ( (lineLength < ICodeLanguageNS.lineLengthMax) && (lineLength + word.length <= ICodeLanguageNS.lineLengthMax) ) {
+                if ((lineLength < ICodeLanguageNS.lineLengthMax) && (lineLength + word.length <= ICodeLanguageNS.lineLengthMax)) {
                     retComment += " " + word;
                     lineLength += word.length + 1;
                 } else {
@@ -78,7 +79,7 @@ class Java implements ICodeLanguage {
 
         } else {
             return "// " + comment;
-        }  
+        }
     }
 }
 
@@ -86,16 +87,16 @@ class Java implements ICodeLanguage {
 class Php implements ICodeLanguage {
 
     _languageID: string = "php";
-    
+
     getName(): string { return this._languageID; }
-    
-    getCommentStyle (comment: string): string {
+
+    getCommentStyle(comment: string): string {
         if (comment.length > ICodeLanguageNS.lineLengthMax) {
             let temp: string[] = comment.split(" ");
             let retComment: string = "/*\n *";
             let lineLength: number = 0;
             temp.forEach(word => {
-                if ( (lineLength < ICodeLanguageNS.lineLengthMax) && (lineLength + word.length <= ICodeLanguageNS.lineLengthMax) ) {
+                if ((lineLength < ICodeLanguageNS.lineLengthMax) && (lineLength + word.length <= ICodeLanguageNS.lineLengthMax)) {
                     retComment += " " + word;
                     lineLength += word.length + 1;
                 } else {
@@ -107,7 +108,7 @@ class Php implements ICodeLanguage {
 
         } else {
             return "// " + comment;
-        }  
+        }
     }
 }
 
@@ -115,16 +116,16 @@ class Php implements ICodeLanguage {
 class Csharp implements ICodeLanguage {
 
     _languageID: string = "c#";
-    
+
     getName(): string { return this._languageID; }
-    
-    getCommentStyle (comment: string): string {
+
+    getCommentStyle(comment: string): string {
         if (comment.length > ICodeLanguageNS.lineLengthMax) {
             let temp: string[] = comment.split(" ");
             let retComment: string = "/*\n *";
             let lineLength: number = 0;
             temp.forEach(word => {
-                if ( (lineLength < ICodeLanguageNS.lineLengthMax) && (lineLength + word.length <= ICodeLanguageNS.lineLengthMax) ) {
+                if ((lineLength < ICodeLanguageNS.lineLengthMax) && (lineLength + word.length <= ICodeLanguageNS.lineLengthMax)) {
                     retComment += " " + word;
                     lineLength += word.length + 1;
                 } else {
@@ -136,7 +137,7 @@ class Csharp implements ICodeLanguage {
 
         } else {
             return "// " + comment;
-        }  
+        }
     }
 }
 
@@ -144,16 +145,16 @@ class Csharp implements ICodeLanguage {
 class Go implements ICodeLanguage {
 
     _languageID: string = "go";
-    
+
     getName(): string { return this._languageID; }
-    
-    getCommentStyle (comment: string): string {
+
+    getCommentStyle(comment: string): string {
         if (comment.length > ICodeLanguageNS.lineLengthMax) {
             let temp: string[] = comment.split(" ");
             let retComment: string = "/*\n *";
             let lineLength: number = 0;
             temp.forEach(word => {
-                if ( (lineLength < ICodeLanguageNS.lineLengthMax) && (lineLength + word.length <= ICodeLanguageNS.lineLengthMax) ) {
+                if ((lineLength < ICodeLanguageNS.lineLengthMax) && (lineLength + word.length <= ICodeLanguageNS.lineLengthMax)) {
                     retComment += " " + word;
                     lineLength += word.length + 1;
                 } else {
@@ -165,7 +166,7 @@ class Go implements ICodeLanguage {
 
         } else {
             return "// " + comment;
-        }  
+        }
     }
 }
 
@@ -173,16 +174,16 @@ class Go implements ICodeLanguage {
 class C implements ICodeLanguage {
 
     _languageID: string = "c";
-    
+
     getName(): string { return this._languageID; }
-    
-    getCommentStyle (comment: string): string {
+
+    getCommentStyle(comment: string): string {
         if (comment.length > ICodeLanguageNS.lineLengthMax) {
             let temp: string[] = comment.split(" ");
             let retComment: string = "/*\n *";
             let lineLength: number = 0;
             temp.forEach(word => {
-                if ( (lineLength < ICodeLanguageNS.lineLengthMax) && (lineLength + word.length <= ICodeLanguageNS.lineLengthMax) ) {
+                if ((lineLength < ICodeLanguageNS.lineLengthMax) && (lineLength + word.length <= ICodeLanguageNS.lineLengthMax)) {
                     retComment += " " + word;
                     lineLength += word.length + 1;
                 } else {
@@ -194,6 +195,6 @@ class C implements ICodeLanguage {
 
         } else {
             return "// " + comment;
-        }  
+        }
     }
 }

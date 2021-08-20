@@ -8,14 +8,15 @@ def main():
 
     lamner = ServerRunner()
     func = lamner.pickArgs(sys.argv[1])
-    func()
+    if (len(sys.argv) > 2):
+        func(sys.argv[2])
+    else:
+        func()
 
 
 class ServerRunner:
     def __init__(self):
         self.server = None
-        self.port = 3000
-        # self.location = ""
 
         self.currLoc = os.path.abspath(__file__)[:-len("runserver.py")]
         os.chdir("C:\\")
@@ -28,17 +29,6 @@ class ServerRunner:
         lines = pipLocations.split(b'\n')
         self.location = str(lines[2])[str(lines[2]).find(
             "c:"):str(lines[2]).rfind(' ')]
-
-    # Function to display correct button
-    def ServerArg(self):
-        # if (
-        #     len(port) == 0
-        #     or not port.isdigit()
-        #     or (port := int(port)) < 0
-        #     or port > 65535
-        # ):
-        #     port = 3000
-        self.RunServer(self.port)
 
     def ShutdownArg(self):
         print("Shutting down the server")
@@ -57,11 +47,18 @@ class ServerRunner:
         print("end pipping")
 
     def RunServer(self, port):
+        if (
+            len(port) == 0
+            or not port.isdigit()
+            or (port := int(port)) < 0
+            or port > 65535
+        ):
+            port = 3000
         os.chdir(f"{self.location}\\CodeSummary")
-        print("Running server on {0}".format(port))
+        print(f"Running server on {port}")
         self.server = subprocess.Popen(
             [f"{self.location}\\CodeSummary\\venv\\Scripts\\flask.exe",
-                "run", "--port", "3000"]
+                "run", "--port", f"{port}"]
         )
 
     def DoNothing(self):
@@ -71,7 +68,7 @@ class ServerRunner:
     def pickArgs(self, op):
         switch = {
             'install': self.PipInstall,
-            'run': self.ServerArg,
+            'run': self.RunServer,
             'shutdown': self.ShutdownArg,
             'test': self.DoNothing
         }
