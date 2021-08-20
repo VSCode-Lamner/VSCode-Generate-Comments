@@ -7,7 +7,6 @@ import _thread
 def main():
 
     lamner = ServerRunner()
-    print(sys.argv[1])
     func = lamner.pickArgs(sys.argv[1])
     func()
 
@@ -64,7 +63,6 @@ class ServerRunner:
             [f"{self.location}\\CodeSummary\\venv\\Scripts\\flask.exe",
                 "run", "--port", "3000"]
         )
-        print("we're done!")
 
     def DoNothing(self):
         print("I'm python!")

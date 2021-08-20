@@ -20,46 +20,44 @@ export function activate(context: vscode.ExtensionContext) {
     languageRegistry.forEach(language => {
         let temp = new language;
         languageFactory.set(temp.getName(), temp);
-        // console.log(temp.getName()); // Debug Statement 
     });
 
-    let disposable2 = vscode.commands.registerCommand("vsgencomments.install", () => {
+    let dirName: string = __dirname;
+    let temp: string[] = dirName.split('\\');
+    dirName = "";
+    temp.forEach(element => {
+        dirName += element + "\\\\";
+    });
+
+    let genTerminal: vscode.Terminal = vscode.window.createTerminal('VSGenComments');
+    genTerminal.hide();
+
+    let installCommand = vscode.commands.registerCommand("vsgencomments.install", () => {
         console.log("Yo, it worked boyyyy");
-        let install = cp.exec('python ' + __dirname + '\\..\\src\\runserver.py install', (err: any, stdout: any, stderr: any) => {
-            console.log('stdout: ' + stdout);
-            console.log('stderr: ' + stderr);
-            if (err) {
-                console.log('error: ' + err);
-            }
-        });
-
-
-        install.on('exit', (code: any) => {
-            console.log("we have ");
-        });
+        // let install = cp.exec('python ' + __dirname + '\\..\\src\\runserver.py install', (err: any, stdout: any, stderr: any) => {
+        //     console.log('stdout: ' + stdout);
+        //     console.log('stderr: ' + stderr);
+        //     if (err) {
+        //         console.log('error: ' + err);
+        //     }
+        // });
+        if (!genTerminal) {
+            genTerminal = vscode.window.createTerminal('VSGenComments');
+        }
+        genTerminal.show(true);
+        genTerminal.sendText('python ' + dirName + '..\\\\src\\\\runserver.py install');
     });
 
-    let disposable3 = vscode.commands.registerCommand("vsgencomments.run", () => {
-        console.log("Yo, it worked boyyyy");
-        let run = cp.exec('python ' + __dirname + '\\..\\src\\runserver.py run', (err: any, stdout: any, stderr: any) => {
-            console.log('stdout: ' + stdout);
-            console.log('stderr: ' + stderr);
-            if (err) {
-                console.log('error: ' + err);
-            }
-        });
-
-        run.on('exit', (code: any) => {
-            console.log("we have ");
-        });
+    let runCommand = vscode.commands.registerCommand("vsgencomments.run", () => {
+        if (!genTerminal) {
+            genTerminal = vscode.window.createTerminal('VSGenComments');
+        }
+        genTerminal.show(true);
+        genTerminal.sendText('python ' + dirName + '..\\\\src\\\\runserver.py run');
     });
-
-    // let disposable4 = vscode.commands.registerCommand("vsgencomments.shutdown", () => {
-
-    // });
 
     // Insert Comment Command
-    let disposable1 = vscode.commands.registerCommand(
+    let disposable = vscode.commands.registerCommand(
         "vsgencomments.insertComment",
         () => {
             // Extenstion requries code to be passed to the model
@@ -178,16 +176,14 @@ export function activate(context: vscode.ExtensionContext) {
                 });
             })();
         }); // End Insert Comment Command
-    context.subscriptions.push(disposable1);
-    context.subscriptions.push(disposable2);
-    // context.subscriptions.push(disposable3);
-    // context.subscriptions.push(disposable4);
-
+    context.subscriptions.push(disposable);
+    context.subscriptions.push(installCommand);
+    context.subscriptions.push(runCommand);
 
     // Swap online/local Server destination Command
     // need a global var used in 'insert' command that alternated with each use
 
-
+}
+export function deactivate() {
 
 }
-export function deactivate() { }

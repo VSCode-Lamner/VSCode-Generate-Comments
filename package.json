@@ -22,7 +22,12 @@
 			},
 			{
 				"command": "vsgencomments.install",
-				"title": "Install",
+				"title": "Install Server",
+				"category": "Lamner"
+			},
+			{
+				"command": "vsgencomments.run",
+				"title": "Run Server",
 				"category": "Lamner"
 			}
 		],
