@@ -6,12 +6,12 @@ const cp = require('child_process');
 export function activate(context: vscode.ExtensionContext) {
     console.log('Congratulations, your extension "vsgencomments" is now active!'); // Todo: Remove in final product (prior to publishing)
     vscode.window.showInformationMessage("Extension is running"); // Todo: Remove in final product (prior to publishing)
-    let portNumber: string = "";
-    // Show input box to store a variable number
-    vscode.window.showInputBox({ prompt: "Which port is the server running on?", placeHolder: "Enter a port number" }).then(value => {
-        // Store the value in the variable
-        portNumber = String(value);
-    });
+    // let portNumber: string = "";
+    // // Show input box to store a variable number
+    // vscode.window.showInputBox({ prompt: "Which port is the server running on?", placeHolder: "Enter a port number" }).then(value => {
+    //     // Store the value in the variable
+    //     portNumber = String(value);
+    // });
 
     // Adding predefined languages to factory simplifies software extensibility
     let languageRegistry = ICodeLanguageNS.getImplementations();
@@ -23,9 +23,43 @@ export function activate(context: vscode.ExtensionContext) {
         // console.log(temp.getName()); // Debug Statement 
     });
 
+    let disposable2 = vscode.commands.registerCommand("vsgencomments.install", () => {
+        console.log("Yo, it worked boyyyy");
+        let install = cp.exec('python ' + __dirname + '\\..\\src\\runserver.py install', (err: any, stdout: any, stderr: any) => {
+            console.log('stdout: ' + stdout);
+            console.log('stderr: ' + stderr);
+            if (err) {
+                console.log('error: ' + err);
+            }
+        });
+
+
+        install.on('exit', (code: any) => {
+            console.log("we have ");
+        });
+    });
+
+    let disposable3 = vscode.commands.registerCommand("vsgencomments.run", () => {
+        console.log("Yo, it worked boyyyy");
+        let run = cp.exec('python ' + __dirname + '\\..\\src\\runserver.py run', (err: any, stdout: any, stderr: any) => {
+            console.log('stdout: ' + stdout);
+            console.log('stderr: ' + stderr);
+            if (err) {
+                console.log('error: ' + err);
+            }
+        });
+
+        run.on('exit', (code: any) => {
+            console.log("we have ");
+        });
+    });
+
+    // let disposable4 = vscode.commands.registerCommand("vsgencomments.shutdown", () => {
+
+    // });
 
     // Insert Comment Command
-    let disposable = vscode.commands.registerCommand(
+    let disposable1 = vscode.commands.registerCommand(
         "vsgencomments.insertComment",
         () => {
             // Extenstion requries code to be passed to the model
@@ -144,21 +178,10 @@ export function activate(context: vscode.ExtensionContext) {
                 });
             })();
         }); // End Insert Comment Command
-    context.subscriptions.push(disposable);
-
-
-    // Will only be done the first time. 
-    // Install Server Command
-    //  open a terminal instance
-    //  send text to 'pip install git+https://github.com/Nathan-Nesbitt/CodeSummary
-    //  run our python script 'py our.py install' to pip install in venv
-
-
-    //  Run server Command
-    //  run python script 'py our.py runserver'
-
-    //  Stop Server command
-    //  run python script 'py our.py stopserver'
+    context.subscriptions.push(disposable1);
+    context.subscriptions.push(disposable2);
+    // context.subscriptions.push(disposable3);
+    // context.subscriptions.push(disposable4);
 
 
     // Swap online/local Server destination Command

@@ -67,7 +67,8 @@ class ServerRunner:
         print("we're done!")
 
     def DoNothing(self):
-        pass
+        print("I'm python!")
+        # pass
 
     def pickArgs(self, op):
         switch = {
