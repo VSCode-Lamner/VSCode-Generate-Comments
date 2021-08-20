@@ -29,29 +29,18 @@ export function activate(context: vscode.ExtensionContext) {
         dirName += element + "\\\\";
     });
 
-    let genTerminal: vscode.Terminal = vscode.window.createTerminal('VSGenComments');
-    genTerminal.hide();
+    let genTerminal: vscode.Terminal;
 
     let installCommand = vscode.commands.registerCommand("vsgencomments.install", () => {
-        console.log("Yo, it worked boyyyy");
-        // let install = cp.exec('python ' + __dirname + '\\..\\src\\runserver.py install', (err: any, stdout: any, stderr: any) => {
-        //     console.log('stdout: ' + stdout);
-        //     console.log('stderr: ' + stderr);
-        //     if (err) {
-        //         console.log('error: ' + err);
-        //     }
-        // });
-        if (!genTerminal) {
-            genTerminal = vscode.window.createTerminal('VSGenComments');
-        }
+        if (genTerminal) { genTerminal.dispose(); }
+        genTerminal = vscode.window.createTerminal('VSGenComments');
         genTerminal.show(true);
         genTerminal.sendText('python ' + dirName + '..\\\\src\\\\runserver.py install');
     });
 
     let runCommand = vscode.commands.registerCommand("vsgencomments.run", () => {
-        if (!genTerminal) {
-            genTerminal = vscode.window.createTerminal('VSGenComments');
-        }
+        if (genTerminal) { genTerminal.dispose(); }
+        genTerminal = vscode.window.createTerminal('VSGenComments');
         genTerminal.show(true);
         genTerminal.sendText('python ' + dirName + '..\\\\src\\\\runserver.py run');
     });
@@ -182,6 +171,10 @@ export function activate(context: vscode.ExtensionContext) {
 
     // Swap online/local Server destination Command
     // need a global var used in 'insert' command that alternated with each use
+
+    // 0. Go over extension comments (us)
+    // 1. Update README (user guide)
+    // 2. Technical Documentation (prof)
 
 }
 export function deactivate() {
