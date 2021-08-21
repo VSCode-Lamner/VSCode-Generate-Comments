@@ -8,11 +8,10 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.window.showInformationMessage("Extension is running"); // Todo: Remove in final product (prior to publishing)
 
     //----- IF time permits
-    // Swap online/local Server destination Command
+    // Swap online/local Server destination command
     // need a global var used for fetch request in 'insert' command that alternated with each use of the switch command
 
-
-    // Adding predefined languages to factory simplifies software extensibility
+    // adding predefined languages to factory simplifies software extensibility
     let languageRegistry = ICodeLanguageNS.getImplementations();
     let languageFactory = new Map();
 
@@ -22,9 +21,9 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     let dirName: string = __dirname;
-    let temp: string[] = dirName.split('\\');
+    let dirElements: string[] = dirName.split('\\');
     dirName = "";
-    temp.forEach(element => {
+    dirElements.forEach(element => {
         dirName += element + "\\\\";
     });
 
@@ -55,11 +54,14 @@ export function activate(context: vscode.ExtensionContext) {
         });
     });
 
-    // Insert Comment Command
-    let disposable = vscode.commands.registerCommand(
+    let shutdownCommand = vscode.commands.registerCommand("vsgencomments.shutdown", () => {
+        if (genTerminal) { genTerminal.dispose(); }
+    });
+
+    let insertCommand = vscode.commands.registerCommand(
         "vsgencomments.insertComment",
         () => {
-            // Extenstion requries code to be passed to the model
+            // extenstion requries code to be passed to the model
             const editor = vscode.window.activeTextEditor;
             if (!editor) { return; }
             let selection = editor.selection;
@@ -89,13 +91,11 @@ export function activate(context: vscode.ExtensionContext) {
                     modelResponseJSON = await modelResponse.json();
                     modelResponseComment = modelResponseJSON["response"];
 
-                    // console.log(modelResponseComment); // Debug Statement 
-
                 } catch (err) {
                     console.error(err);
                 }
 
-                // Factory lets us define comment format per language
+                // factory lets us define comment format per language
                 let documentLanguage: string = editor.document.languageId;
                 let languageObject = languageFactory.get(documentLanguage);
                 let formattedComment: string = languageObject.getCommentStyle(
@@ -105,7 +105,7 @@ export function activate(context: vscode.ExtensionContext) {
                 let positionToInsert: vscode.Position =
                     new vscode.Position(selection.start.line, 0);
 
-                // Stitch the comment to their code
+                // stitch the comment to their code
                 editor.edit((editBuilder: vscode.TextEditorEdit) => {
                     editBuilder.insert(positionToInsert, formattedComment + "\n");
                 });
@@ -119,11 +119,10 @@ export function activate(context: vscode.ExtensionContext) {
                     backgroundColor: highlightComment
                 });
 
-                // comment here? or self documenting
-                let splitComment: string[] = formattedComment.split("\n");
+                // selecting up to just before the code is cleaner than selecting precisely the comment
+                let splitCommentByLine: string[] = formattedComment.split("\n");
                 let endOfCommentPosition: vscode.Position = new vscode.Position(
-                    splitComment.length + positionToInsert.line,
-                    0
+                    splitCommentByLine.length + positionToInsert.line, 0
                 );
 
                 let commentRange: vscode.Range = new vscode.Range(
@@ -144,15 +143,14 @@ export function activate(context: vscode.ExtensionContext) {
                     "No: Remove comment"
                 ];
 
-                // Give the user the options they have with the commented code preview
+                // give the user the options they have with the commented code preview
                 const selectedOption = await vscode.window.showInformationMessage(
                     "Would you like to apply this comment?",
                     ...userOptions
                 ).then(selectedOption => {
 
-                    // comment will be inserted
+                    // generated comment will remain inserted
                     if (selectedOption === userOptions[0]) {
-                        // formattedComment += "\n";                                            
 
                         editor.setDecorations(
                             tempCommentDecType,
@@ -162,8 +160,10 @@ export function activate(context: vscode.ExtensionContext) {
                             "Comment Inserted"
                         );
 
-                        // Comment will be removed
-                    } else {
+                    }
+
+                    // generated comment will be removed
+                    else {
                         editor.setDecorations(
                             tempCommentDecType,
                             emptyRange
@@ -177,16 +177,14 @@ export function activate(context: vscode.ExtensionContext) {
                             "Comment Removed"
                         );
                     }
-                });
-            })();
-        }); // End Insert Comment Command
-    context.subscriptions.push(disposable);
+                }); // end of user insert/remove selection
+            })(); // end of fetch response async
+        }); // end insert comment command
+
+    context.subscriptions.push(insertCommand);
     context.subscriptions.push(installCommand);
     context.subscriptions.push(runCommand);
-
-    // 0. Go over extension comments (us)
-    // 1. Update README (user guide)
-    // 2. Technical Documentation (prof)
+    context.subscriptions.push(shutdownCommand);
 
 }
 export function deactivate() { }

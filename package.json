@@ -29,6 +29,11 @@
 				"command": "vsgencomments.run",
 				"title": "Run Server",
 				"category": "Lamner"
+			},
+			{
+				"command": "vsgencomments.shutdown",
+				"title": "Shutdown Server",
+				"category": "Lamner"
 			}
 		],
 		"keybindings": [
