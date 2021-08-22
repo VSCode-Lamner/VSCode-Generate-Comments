@@ -66,8 +66,8 @@ export function activate(context: vscode.ExtensionContext) {
             if (!editor) { return; }
             let selection = editor.selection;
             let selectedText = editor.document.getText(selection);
-            let modelResponseComment: string = "";
             let modelResponseJSON: any = {};
+            let modelResponseComment: string = "";
 
             (async () => {
                 try {
