@@ -1,6 +1,4 @@
-import subprocess
-import sys
-import os
+import subprocess, sys, os, getpass
 
 
 def main():
@@ -14,27 +12,7 @@ class ServerRunner:
         self.server = None
         self.currentDirectory = os.path.abspath(__file__)[:-len("runserver.py")]
         
-        # must find universal location to install codesummary server files
-        os.chdir("C:\\")
-        listAllPipPackages = subprocess.Popen(
-            ["pip", "list", "-v"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-        )
-        pipInstallPackageList, unused = listAllPipPackages.communicate()
-        packageListByLine = pipInstallPackageList.split(b'\n')
-        packageListByLine = packageListByLine[2:]
-        self.pipPackagesDirectory = ""
-        for package in packageListByLine:
-            self.pipPackagesDirectory = (    
-                str( package )[
-                    str( package ).find( "c:".lower() ) 
-                    : str( package ).rfind(' ')
-                ]
-            )
-            packageDirectoryByElement = self.pipPackagesDirectory.split('\\\\')
-            if (
-                packageDirectoryByElement[-1] == "site-packages".lower()
-                and packageDirectoryByElement[-2] == "lib".lower()
-            ): break
+        self.pipPackagesDirectory = f"c:\\Users\\{getpass.getuser()}\\AppData\\Local"
 
     def InstallServer(self):
         print("Beginning Server Installation!")
@@ -44,7 +22,7 @@ class ServerRunner:
         os.system("python -m venv venv")
         os.system(".\\venv\\Scripts\\pip.exe install .")
         os.system(".\\venv\\Scripts\\pip.exe install python-dotenv")
-        os.system(f"cp {self.currentDirectory}\\.env .")
+        os.system(f"copy {self.currentDirectory}\\.env .")
         print("Server Installation Complete!")
 
     def RunServer(self, port):
