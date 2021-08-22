@@ -24,7 +24,7 @@ export function activate(context: vscode.ExtensionContext) {
     let dirElements: string[] = dirName.split('\\');
     dirName = "";
     dirElements.forEach(element => {
-        dirName += element + "\\\\";
+        dirName += element + '\\\\';
     });
 
     let genTerminal: vscode.Terminal;
