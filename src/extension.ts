@@ -151,7 +151,6 @@ export function activate(context: vscode.ExtensionContext) {
 
                     // generated comment will remain inserted
                     if (selectedOption === userOptions[0]) {
-
                         editor.setDecorations(
                             tempCommentDecType,
                             emptyRange
@@ -159,7 +158,6 @@ export function activate(context: vscode.ExtensionContext) {
                         vscode.window.showInformationMessage(
                             "Comment Inserted"
                         );
-
                     }
 
                     // generated comment will be removed
