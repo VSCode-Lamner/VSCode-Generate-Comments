@@ -11,7 +11,6 @@ class ServerRunner:
     def __init__(self):
         self.server = None
         self.currentDirectory = os.path.abspath(__file__)[:-len("runserver.py")]
-        
         self.pipPackagesDirectory = f"c:\\Users\\{getpass.getuser()}\\AppData\\Local"
 
     def InstallServer(self):
