@@ -34,7 +34,7 @@ export function activate(context: vscode.ExtensionContext) {
         if (genTerminal) { genTerminal.dispose(); }
         genTerminal = vscode.window.createTerminal('VSGenComments');
         genTerminal.show(true);
-        genTerminal.sendText('python ' + dirName + '..\\\\src\\\\runserver.py install');
+        genTerminal.sendText('python ' + dirName + '..\\\\lamner\\\\runserver.py install');
     });
 
     let runCommand = vscode.commands.registerCommand("vsgencomments.run", () => {
@@ -48,7 +48,7 @@ export function activate(context: vscode.ExtensionContext) {
             genTerminal.sendText(
                 'python '
                 + dirName
-                + '..\\\\src\\\\runserver.py run '
+                + '..\\\\lamner\\\\runserver.py run '
                 + portNumber
             );
         });
