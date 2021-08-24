@@ -19,7 +19,7 @@ This extension interfaces with a server-based AI model that returns a text comme
 
 &nbsp;
 
-![vsgen-gif](./documentation/vscode-extension-demo.gif)
+![vsgen-gif](https://github.com/kaminskg/VSCode-Generate-Comments/blob/main/documentation/vscode-extension-demo.gif?raw=true)
 
 &nbsp;
 
@@ -71,6 +71,6 @@ The [following](https://github.com/Nathan-Nesbitt/CodeSummary) link will lead to
 
 ## Release Notes
 
-### 0.0.1
+### 0.1.0
 
-Initial development release of VSGencomments
+Initial development release of Lamner Comment Generator
