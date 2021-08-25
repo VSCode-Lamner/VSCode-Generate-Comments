@@ -4,6 +4,8 @@
 ![Python](https://img.shields.io/badge/python-%2314354C.svg?style=for-the-badge&logo=python&logoColor=white)
 ![Visual Studio Code](https://img.shields.io/badge/VisualStudioCode-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white)
 ![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white)
+\
+&nbsp;
 
 This extension interfaces with a server-based AI model that returns a text comment describing a function passed to the model as a parameter. This extension utilizes Rishab Sharma's machine learning model used by the server.
 
@@ -32,7 +34,7 @@ The extension is an academic project which is not consistently maintained. It is
 &nbsp;
 
 ![vsgen-gif](https://github.com/kaminskg/VSCode-Generate-Comments/blob/main/documentation/vscode-extension-demo.gif?raw=true)
-
+\
 &nbsp;
 
 ## Requirements
@@ -40,11 +42,12 @@ The extension is an academic project which is not consistently maintained. It is
 Please have Git installed on to the system PATH, you can refer to the [following](https://git-scm.com/downloads) website for reference.
 
 Please have Python installed on to the system PATH, you can refer to the [following](https://www.python.org/downloads/) website for reference.
+\
 &nbsp;
 
 ## Usage
 
-1. Make sure to follow the #[Requirements](#requirements) section to properly run the server to load in the lamner model.
+1. Make sure to follow the [Requirements](#requirements) section to properly run the server to load in the lamner model.
 2. Run the following command `Lamner: Install Server` through the VSCode command palette (only need to do it once after the extension is first installed).
 3. Next, run the following command `Lamner: Run Server` through the VSCode command palette.
 4. Now you can select your desired functions, and use the keyboard shortcut to find the generated comment.
@@ -82,6 +85,8 @@ We are not aware of any security issues. The server is run locally using an open
 ## Lamner Model
 
 The [following](https://github.com/Nathan-Nesbitt/CodeSummary) link will lead to the model that is installed in this extension.
+\
+&nbsp;
 
 ## Release Notes
 
