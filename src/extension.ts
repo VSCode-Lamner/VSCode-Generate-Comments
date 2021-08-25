@@ -4,12 +4,7 @@ import fetch from 'cross-fetch';
 const cp = require('child_process');
 
 export function activate(context: vscode.ExtensionContext) {
-    console.log('Congratulations, your extension "vsgencomments" is now active!'); // Todo: Remove in final product (prior to publishing)
-    vscode.window.showInformationMessage("Extension is running"); // Todo: Remove in final product (prior to publishing)
-
-    //----- IF time permits
-    // Swap online/local Server destination command
-    // need a global var used for fetch request in 'insert' command that alternated with each use of the switch command
+    vscode.window.showInformationMessage("Lamner Comment Generator is running");
 
     // adding predefined languages to factory simplifies software extensibility
     let languageRegistry = ICodeLanguageNS.getImplementations();

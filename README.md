@@ -71,6 +71,6 @@ The [following](https://github.com/Nathan-Nesbitt/CodeSummary) link will lead to
 
 ## Release Notes
 
-### 0.1.0
+### 0.1.2
 
 Initial development release of Lamner Comment Generator

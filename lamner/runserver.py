@@ -44,7 +44,7 @@ class ServerRunner:
             'install': self.InstallServer,
             'run': self.RunServer
         }
-        return switch.get(op, "show me this instead!")
+        return switch.get(op)
 
 
 main()
