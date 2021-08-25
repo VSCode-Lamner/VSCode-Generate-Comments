@@ -5,7 +5,19 @@
 ![Visual Studio Code](https://img.shields.io/badge/VisualStudioCode-0078d7.svg?style=for-the-badge&logo=visual-studio-code&logoColor=white)
 ![Flask](https://img.shields.io/badge/flask-%23000.svg?style=for-the-badge&logo=flask&logoColor=white)
 
-This extension interfaces with a server-based AI model that returns a text comment describing a function passed to the model as a parameter.
+This extension interfaces with a server-based AI model that returns a text comment describing a function passed to the model as a parameter. This extension utilizes Rishab Sharma's machine learning model used by the server.
+
+The extension is an academic project which is not consistently maintained. It is currently in a beta-testing state.
+
+**Comments are generated using a locally run server and are not sent anywhere external.**
+\
+&nbsp;
+  
+## Disclaimers
+
+- Only works for Java files.
+- Only works on Windows.
+- The Lamner Model server is installed onto `C:/Users/$USER/Appdata/Local`.
 \
 &nbsp;
 
@@ -32,15 +44,11 @@ Please have Python installed on to the system PATH, you can refer to the [follow
 
 ## Usage
 
-1. Install Node.js, you can refer to the [following](https://nodejs.org/en/download/) website for reference.
-2. Make sure to follow the #[Requirements](#requirements) section to properly run the server to load in the lamner model.
-3. Run npm install to get all of the needed dependencies.
-4. Open up a terminal instance in VSCode, and type in `npm run watch`
-5. Hit `F5` to go into debug mode.
-6. Run the following command `Lamner: Install Server` through the VSCode command palette (only need to do it once after the extension is first installed).
-7. Next, run the following command `Lamner: Run Server` through the VSCode command palette.
-8. Now you can select your desired functions, and use the keyboard shortcut to find the generated comment.
-9. To shutdown the server you can either:
+1. Make sure to follow the #[Requirements](#requirements) section to properly run the server to load in the lamner model.
+2. Run the following command `Lamner: Install Server` through the VSCode command palette (only need to do it once after the extension is first installed).
+3. Next, run the following command `Lamner: Run Server` through the VSCode command palette.
+4. Now you can select your desired functions, and use the keyboard shortcut to find the generated comment.
+5. To shutdown the server you can either:
     - Close the VSCode edtior.  
     - Click the 'trash bin' icon on the terminal.
     - Enter `CTRL + C` on the terminal.
@@ -59,9 +67,15 @@ This extension contributes the following palette commands:
 \
 &nbsp;
 
-## Known Issues
+## General Issues
 
-No known issues to date
+No known issues to date.
+\
+&nbsp;
+
+## Security Issues
+
+We are not aware of any security issues. The server is run locally using an open source machine learning model, but this extension project does not maintain that code repository, thus we cannot guarantee changes to that code will may compromise security. See the [following](#lamner-model) section for a link to the server model's repository.
 \
 &nbsp;
 
@@ -71,6 +85,6 @@ The [following](https://github.com/Nathan-Nesbitt/CodeSummary) link will lead to
 
 ## Release Notes
 
-### 0.1.2
+### 1.0.0
 
-Initial development release of Lamner Comment Generator
+Initial development release of Lamner Comment Generator.
