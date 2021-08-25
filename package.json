@@ -1,6 +1,6 @@
 {
 	"name": "vsgencomments",
-	"publisher": "GuyKaminsky",
+	"publisher": "VSCodeLamner",
 	"repository": {"url": "https://github.com/kaminskg/VSCode-Generate-Comments"},
 	"displayName": "Lamner Comment Generator",
 	"description": "This is a Beta test of the \"Lamner Comment Generator\" extension.",
