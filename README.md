@@ -33,7 +33,7 @@ The extension is an academic project which is not consistently maintained. It is
 
 &nbsp;
 
-![vsgen-gif](https://github.com/kaminskg/VSCode-Generate-Comments/blob/main/documentation/vscode-extension-demo.gif?raw=true)
+![vsgen-gif](https://github.com/VSCode-Lamner/VSCode-Generate-Comments/blob/main/images/vscode-extension-demo.gif?raw=true)
 \
 &nbsp;
 
@@ -90,6 +90,6 @@ The [following](https://github.com/Nathan-Nesbitt/CodeSummary) link will lead to
 
 ## Release Notes
 
-### 1.0.0
+### 1.0.1
 
 Initial development release of Lamner Comment Generator.
