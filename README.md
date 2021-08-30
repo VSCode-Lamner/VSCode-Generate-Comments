@@ -7,7 +7,9 @@
 \
 &nbsp;
 
-This extension interfaces with a server-based AI model that returns a text comment describing a function passed to the model as a parameter. This extension utilizes Rishab Sharma's machine learning model used by the server.
+This extension interfaces with a server-based AI model that returns a text comment describing a function passed to the model as a parameter.
+
+This extension utilizes Rishab Sharma's machine learning model. Nathan Nesbitt built the client-side server application, which uses Rishab Sharma's model. Finally, Guy Kaminsky made the Visual Studio Code extension with the help of Rocco Ruscitti and published it to the visual studio marketplace.
 
 The extension is an academic project which is not consistently maintained. It is currently in a beta-testing state.
 
@@ -90,6 +92,6 @@ The [following](https://github.com/Nathan-Nesbitt/CodeSummary) link will lead to
 
 ## Release Notes
 
-### 1.0.1
+### 1.0.2
 
 Initial development release of Lamner Comment Generator.
